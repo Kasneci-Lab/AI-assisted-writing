@@ -4,5 +4,5 @@ from .utils import readfile, generate_html_pyecharts,clear_list
 from .welcome_page import welcome_page
 from . import var
 from .input_page import upload_image,input_text
-
+from . import session
 from .experimental import pipeline

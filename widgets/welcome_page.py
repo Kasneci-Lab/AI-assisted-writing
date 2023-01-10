@@ -13,14 +13,9 @@ def welcome_page():
         st.markdown('''### Do you want to upload a picture of your essay or input text manually?'''),
     ]
 
-    # form = st.empty()
-    # tmp = form.form("my_form")
-    # input_type=tmp.radio("",INPUT_TYPES)
-    #
-    # # Now add a submit button to the form:
-    # submitted = tmp.form_submit_button("Submit")
+
     input_radio = st.empty()
-    input_type = input_radio.radio("",INPUT_TYPES)
+    input_radio.radio("",INPUT_TYPES, key='input_type')
     welcome_page.append(input_radio)
 
     btn = st.empty()
@@ -29,7 +24,6 @@ def welcome_page():
 
     st.session_state.widgets['welcome'] = welcome_page
 
-    return input_type
 
 
 

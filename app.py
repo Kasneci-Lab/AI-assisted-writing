@@ -5,38 +5,15 @@ from widgets import *
 from widgets.var import INPUT_TYPES
 import time
 from PIL import Image
+from widgets.session import *
 
 # sidebar content
 user_input_dict = render_sidebar()
 st.sidebar.info(body=f'''Current Configuration: {user_input_dict}''')
 
 
-if 'submitted' not in st.session_state:
-    st.session_state.submitted = False
-
-if 'texted' not in st.session_state:
-    st.session_state.texted = False
-
-if 'text' not in st.session_state:
-    st.session_state.text = ''
-
-if 'ing' not in st.session_state:
-    st.session_state.ing = False
-
-if 'input_type' not in st.session_state:
-    st.session_state.input_type = None
-
-if 'widgets' not in st.session_state:
-    st.session_state.widgets = dict(
-        welcome = None
-    )
-
-
-
-
-
 if not st.session_state.ing:
-    welcome_widgets, input_type = welcome_page()
+    welcome_page()
 
 
 
@@ -48,9 +25,10 @@ if st.session_state.texted:
 
 elif st.session_state.submitted:
     print(2)
+    input_type = st.session_state['input_type']
     st.session_state.ing = True
     valid_arguments(user_input_dict)
-    clear_list(welcome_widgets)
+    clear_list(st.session_state.widgets['welcome'])
     # upload an image
     if input_type == INPUT_TYPES[0]:
         ret = upload_image()
