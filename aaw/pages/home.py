@@ -22,5 +22,5 @@ def homepage():
     input_radio.radio("", INPUT_TYPES,key='input_type')
     btn.button(label='Next', on_click=submit)
 
-    error_empty = st.empty()
-    __homepage__.append(empty=error_empty)
+
+
