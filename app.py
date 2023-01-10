@@ -9,7 +9,8 @@ from aaw.pages import *
 session.update('page_map',dict(
     home=homepage,
     upload_image = upload_image,
-    feedback = feedback
+    feedback = feedback,
+    input_text = input_text
 ))
 session.init('page_widgets', dict())
 session.init('current_page', 'home')
