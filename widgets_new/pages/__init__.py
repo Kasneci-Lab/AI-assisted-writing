@@ -1,10 +1,10 @@
-from .home import homepage
-from .upload_image import upload_image
-from .home import __homepage__
-from.upload_image import __uploadpage__
+from .home import homepage,__homepage__
+from .upload_image import upload_image,__uploadpage__
+from .feedback import __feedbackpage__,feedback
 
 PAGES = [
     __homepage__,
-    __uploadpage__
+    __uploadpage__,
+    __feedbackpage__
 ]
 

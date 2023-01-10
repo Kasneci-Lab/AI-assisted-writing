@@ -1,14 +1,12 @@
 from  PIL import Image
 import streamlit as st
 from ..globals import reader
-from ..experimental import preprocess
 from .base import BasePage
+from ..callbacks import preprocess_text
 
 __uploadpage__ = BasePage(name='upload_image')
 
 def upload_image():
-
-
     title_empty = st.empty()
     upload_file_empty = st.empty()
     md_empty = st.empty()
@@ -35,8 +33,5 @@ def upload_image():
             text = reader.readtext(image=image, detail=0)
             text = ' '.join(text)
         md_empty.markdown('**Please correct the mistakes:**')
-        text= textarea_empty.text_area('', value=text, height=600)
-        btn_empty.button('Done', on_click=preprocess, kwargs=dict(
-            widgets = widgets,
-            text = text
-        ))
+        textarea_empty.text_area('', value=text, height=600,key='text')
+        btn_empty.button('Done', on_click=preprocess_text)

@@ -3,6 +3,7 @@ from ..globals import INPUT_TYPES
 from ..callbacks import submit
 import streamlit as st
 
+
 __homepage__ = BasePage(name='home')
 
 def homepage():
@@ -20,3 +21,6 @@ def homepage():
 
     input_radio.radio("", INPUT_TYPES,key='input_type')
     btn.button(label='Next', on_click=submit)
+
+    error_empty = st.empty()
+    __homepage__.append(empty=error_empty)

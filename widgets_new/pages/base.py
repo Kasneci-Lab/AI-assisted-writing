@@ -24,3 +24,22 @@ class BasePage:
     def extend(self,*,li:list):
         for i in li:
             self.append(empty=i)
+
+        # subscriptable and slice-able
+    def __getitem__(self, idx):
+        return self.__widgets__[idx]
+
+    def __str__(self):
+        ret = f'There are {len(self.__widgets__)} articles:\n'
+        for id, article in enumerate(self.__widgets__):
+            ret += f'{id + 1}) '
+            ret += f'{article}'
+
+        return ret
+
+    # return an iterator that can be used in for loop etc.
+    def __iter__(self):
+        return self.__widgets__.__iter__()
+
+    def __len__(self):
+        return len(self.__widgets__)

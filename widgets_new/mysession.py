@@ -16,10 +16,7 @@ class MySession:
             st.session_state[key] = value
 
     def update(self,key:str,value):
-        if key not in st.session_state:
-            self.init(key,value)
-        else:
-            st.session_state[key]=value
+        st.session_state[key]=value
 
     def has(self,key:str):
         return key in self.to_dict().keys()

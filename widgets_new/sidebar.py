@@ -1,5 +1,6 @@
 import streamlit as st
-from .utils import error_and_stop, reset_session
+from .utils import error_and_stop
+from .callbacks import go_home
 
 def valid_arguments(kwargs):
     # study-year
@@ -9,8 +10,7 @@ def valid_arguments(kwargs):
         return False
     return True
 
-def reset_state():
-    reset_session()
+
 
 def render_sidebar():
     sidebar_markdown = f'''
@@ -43,7 +43,7 @@ def render_sidebar():
 
 
     st.sidebar.markdown('## Choose the essay category')
-    article_type = st.sidebar.selectbox('Category',on_change=reset_state,options=[
+    article_type = st.sidebar.selectbox('Category',on_change=go_home,options=[
         'Bericht',
         'Erörterung',
         'Essay',
@@ -55,11 +55,13 @@ def render_sidebar():
         'Szenenanalyse',
     ])
 
-    study_year = st.sidebar.selectbox('Study year',options=['-']+list(range(1,14)),on_change=reset_state)
+    study_year = st.sidebar.selectbox('Study year',options=['-']+list(range(1,14)),on_change=go_home)
     st.session_state.user_args = dict(
         article_type = article_type,
         study_year = study_year
     )
+
+    return st.sidebar.selectbox('Debug', options=['No', 'Yes']) # todo: remove this line
 
 
 

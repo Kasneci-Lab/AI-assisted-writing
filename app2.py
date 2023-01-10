@@ -6,10 +6,10 @@ from widgets_new.pages import *
 
 
 # my_session setup
-session.update('text', '')
 session.update('page_map',dict(
     home=homepage,
-    upload_image = upload_image
+    upload_image = upload_image,
+    feedback = feedback
 ))
 session.init('page_widgets', dict())
 session.init('current_page', 'home')
@@ -18,13 +18,13 @@ for page in PAGES:
 
 
 # sidebar
-render_sidebar()
-st.sidebar.info(body=f'''Current Configuration: {st.session_state['user_args']}''')
-
+debug = render_sidebar()
 
 
 # debugging
-st.info(session.summary())
+if debug:
+    if debug == 'Yes':
+        st.info(session.summary())
 
 
 
