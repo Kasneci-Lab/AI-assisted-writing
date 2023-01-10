@@ -1,6 +1,16 @@
 import streamlit as st
-import datetime
-# from .utils import PACKAGE_ROOT
+from .utils import error_and_stop, reset_session
+
+def valid_arguments(kwargs):
+    # study-year
+    studyyear = kwargs['study_year']
+    if not isinstance(studyyear,int):
+        error_and_stop('Study year must be selected first.')
+        return False
+    return True
+
+def reset_state():
+    reset_session()
 
 def render_sidebar():
     sidebar_markdown = f'''
@@ -28,41 +38,28 @@ def render_sidebar():
     ---
 
     '''
-    # st.sidebar.markdown('## Choose the Paper Search Platforms')
     st.sidebar.markdown(sidebar_markdown,unsafe_allow_html=True)
 
-    # platforms = st.sidebar.multiselect('Platforms',options=
-    # [
-    #     # 'Elvsier',
-    #     'IEEE',
-    #     # 'Google Scholar',
-    #     'Arxiv',
-    #     'PaperWithCode'
-    # ], default=[
-    #     # 'Elvsier',
-    #     'IEEE',
-    #     # 'Google Scholar',
-    #     'Arxiv',
-    #     'PaperWithCode'
-    # ])
-    #
-    #
-    #
-    # st.sidebar.markdown('## Choose the max number of papers to search')
-    # number_papers=st.sidebar.slider('number', 50, 200, 50, 10)
-    #
-    # st.sidebar.markdown('## Choose the start year of publication')
-    # this_year = datetime.date.today().year
-    # start_year = st.sidebar.slider('year start:', 2000, this_year, 2010, 1)
-    #
-    # st.sidebar.markdown('## Choose the end year of publication')
-    # end_year = st.sidebar.slider('year end:', 2000, this_year, this_year, 1)
-    #
-    # return platforms, number_papers, start_year, end_year
 
-    st.sidebar.markdown('## Choose the essay type')
-    article_type = st.sidebar.selectbox('essay',options=['Article', 'Journal'])
+
+    st.sidebar.markdown('## Choose the essay category')
+    article_type = st.sidebar.selectbox('Category',on_change=reset_state,options=[
+        'Bericht',
+        'Erörterung',
+        'Essay',
+        'Gedichtsanalyse',
+        'Inhaltsangabe',
+        'Kurzgeschichte',
+        'Rezension',
+        'Sachtextanalyse',
+        'Szenenanalyse',
+    ])
+
+    study_year = st.sidebar.selectbox('Study year',options=['-']+list(range(1,14)),on_change=reset_state)
+
 
     return dict(
-        article_type = article_type
+        article_type = article_type,
+        study_year = study_year
     )
+

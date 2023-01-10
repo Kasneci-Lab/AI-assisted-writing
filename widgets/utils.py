@@ -26,3 +26,14 @@ def clear_list(li:list):
 
     with st.spinner('Please wait...'):
         time.sleep(1)
+
+def error_and_stop(msg:str):
+    st.session_state.submitted = False
+    st.error(msg)
+    st.stop()
+
+def reset_session():
+    st.session_state.submitted = False
+    st.session_state.texted = False
+    st.session_state.text = ''
+    st.session_state.ing = False
