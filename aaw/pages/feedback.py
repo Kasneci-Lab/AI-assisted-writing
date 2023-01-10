@@ -3,6 +3,7 @@ import streamlit as st
 import openai
 import time
 from ..mysession import session
+from ..callbacks import go_home
 
 
 __feedbackpage__ = BasePage(name='feedback')
@@ -33,10 +34,12 @@ def feedback():
     title_empty = st.empty()
     input_empty = st.empty()
     fb_empty = st.empty()
+    btn_empty = st.empty()
     widgets = [
         title_empty,
         input_empty,
-        fb_empty
+        fb_empty,
+        btn_empty
     ]
     __feedbackpage__.extend(li=widgets)
 
@@ -45,4 +48,5 @@ def feedback():
     with st.spinner():
         feedback_text = __getfeedback__(session.get('text'))
     fb_empty.info(f'''{feedback_text}''')
+    btn_empty.button("Reset", on_click=go_home)
 
