@@ -15,6 +15,7 @@ session.update('page_map',dict(
     input_text = input_text,
     input_type = input_type,
 ))
+session.init('func_args', dict())
 session.init('page_widgets', dict())
 session.init('current_page', 'home') # only has effect when a new session starts, a new session starts when user refreshes the page
 session.update('feedback',None)

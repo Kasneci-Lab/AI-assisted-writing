@@ -3,7 +3,7 @@ import streamlit as st
 import openai
 import time
 from ..mysession import session
-from ..callbacks import go_home
+from ..callbacks import go_home, go_inputtext
 from ..utils import store_data
 
 
@@ -35,7 +35,9 @@ def feedback():
     title_empty = st.empty()
     input_empty = st.empty()
     fb_empty = st.empty()
+    btn2_empty = st.empty()
     btn_empty = st.empty()
+
 
     widgets = [
         title_empty,
@@ -46,22 +48,17 @@ def feedback():
     __feedbackpage__.extend(li=widgets)
 
     title_empty.markdown("# Your Feedbacks")
-    if session.has('text_tmp'):
-        essay = session.get('text_tmp')
-    else:
-        essay = session.get('text')
+
+    essay = session.get('text')
     input_empty.markdown(essay)
     with st.spinner():
         feedback_text = __getfeedback__(session.get('text'))
         session.update('feedback', feedback_text)
         store_data()
     fb_empty.info(f'''{feedback_text}''')
-    input_empty.text_area(
-        label='You can also modify your essay and ask for new feedbacks!',
-        value=essay,
-        key='text_tmp',
-        # on_change=
-    )
     btn_empty.button("Reset", on_click=go_home)
+    btn2_empty.button('Modify essay', on_click=go_inputtext,kwargs=dict(
+        text = essay
+    ))
 
 

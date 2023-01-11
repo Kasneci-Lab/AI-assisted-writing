@@ -3,6 +3,11 @@ from .mysession import session
 from .utils import valid_user_arguments
 
 
+def go_inputtext(**kwargs):
+
+    session.clear()
+    session.update('current_page', 'input_text',**kwargs)
+
 def resubmit_essay():
     session.update('current_page','feedback')
 
@@ -23,7 +28,6 @@ def go_inputtype():
 
 
 def submit():
-
     session.clear()
     input_type = session.get('input_type')
     if input_type == 'Upload a picture':
