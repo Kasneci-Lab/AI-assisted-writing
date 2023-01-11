@@ -53,7 +53,7 @@ def create_dataset():
 
     filepath = p.joinpath('raw.csv')
     if not filepath.exists():
-        df = pd.DataFrame(columns=['essay category', 'study year', 'essay text', 'feedback'])
+        df = pd.DataFrame(columns=['essay category', 'study year','title', 'essay text', 'feedback'])
         df.to_csv(filepath, index=False)
 
 
@@ -68,6 +68,7 @@ def store_data()->None:
         newsample={
             'essay category': session.get('user_args')['article_type'],
             'study year': session.get('user_args')['study_year'],
+            'title': session.get('title'),
             'essay text': session.get('text'),
             'feedback': session.get('feedback')
         }

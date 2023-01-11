@@ -12,11 +12,13 @@ session.update('page_map',dict(
     home=homepage,
     upload_image = upload_image,
     feedback = feedback,
-    input_text = input_text
+    input_text = input_text,
+    input_type = input_type,
 ))
 session.init('page_widgets', dict())
 session.init('current_page', 'home') # only has effect when a new session starts, a new session starts when user refreshes the page
 session.update('feedback',None)
+session.init('title',None)
 
 for page in PAGES:
     page.__post_process__(session)
