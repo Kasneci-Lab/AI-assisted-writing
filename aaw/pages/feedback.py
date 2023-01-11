@@ -50,15 +50,15 @@ def feedback():
     title_empty.markdown("# Your Feedbacks")
 
     essay = session.get('text')
-    input_empty.markdown(essay)
+    input_empty.info(essay)
     with st.spinner():
         feedback_text = __getfeedback__(session.get('text'))
         session.update('feedback', feedback_text)
         store_data()
-    fb_empty.info(f'''{feedback_text}''')
+    fb_empty.success(f'''{feedback_text}''')
     btn_empty.button("Reset", on_click=go_home)
     btn2_empty.button('Modify essay', on_click=go_inputtext,kwargs=dict(
-        text = essay
+        prompt = True
     ))
 
 

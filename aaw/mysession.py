@@ -15,10 +15,8 @@ class MySession:
         if key not in st.session_state:
             st.session_state[key] = value
 
-    def update(self,key:str,value,**kwargs):
+    def update(self,key:str,value):
         st.session_state[key]=value
-        if len(kwargs) > 0:
-            st.session_state['func_args'] = kwargs
 
     def has(self,key:str):
         return key in self.to_dict().keys()
@@ -46,7 +44,7 @@ class MySession:
     def render(self):
         page = self.get_current_page()
         page_func = self.get_page_map()[page]
-        page_func(**st.session_state.func_args)
+        page_func()
 
     def clear(self):
         page = self.get_current_page()

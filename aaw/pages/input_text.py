@@ -5,7 +5,7 @@ from ..mysession import session
 
 __inputtextpage__ = BasePage(name='input_text')
 
-def input_text(*,text=None):
+def input_text():
     global __inputtextpage__
     title_empty = st.empty()
     textarea_empty = st.empty()
@@ -18,19 +18,28 @@ def input_text(*,text=None):
     ])
 
     title_empty.markdown("# Enter you essay here :)")
-    if text is None:
+    prompt = session.get('prompt')
+
+    if not prompt:
         essay = textarea_empty.text_area(
             label='',
             placeholder="Ich liebe Schokoladen...",
-            height=600,
+            height=500,
         )
     else:
-        essay = textarea_empty.text_area(
+        col1,col2 = textarea_empty.columns([1,1])
+        col1.markdown(f'''**Original Essay:**''')
+        col1.info(session.get('text'))
+        essay = col2.text_area(
             label='',
-            value = text,
-            height=600,
+            placeholder='change your essay here',
+            height=500,
         )
+        expander= col1.expander('show feedbacks')
+        expander.success(session.get('feedback'))
+
+
     btn_empty.button("Submit", on_click=submit_essay,kwargs=dict(
         essay = essay
     ))
-    session.update('func_args', dict())
+

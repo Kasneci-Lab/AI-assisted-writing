@@ -2,7 +2,7 @@ from  PIL import Image
 import streamlit as st
 from ..globals import reader
 from .base import BasePage
-from ..callbacks import preprocess_text
+from ..callbacks import submit_essay
 from ..utils import get_random_string, rmrf
 
 __uploadpage__ = BasePage(name='upload_image')
@@ -43,5 +43,7 @@ def upload_image():
             image.close()
             rmrf(filename)
         md_empty.markdown('**Please correct the mistakes:**')
-        textarea_empty.text_area('', value=text, height=600,key='text')
-        btn_empty.button('Done', on_click=preprocess_text)
+        essay= textarea_empty.text_area('', value=text, height=500)
+        btn_empty.button('Done', on_click=submit_essay,kwargs=dict(
+            essay = essay
+        ))

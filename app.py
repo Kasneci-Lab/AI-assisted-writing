@@ -1,4 +1,5 @@
 import streamlit as st
+st.set_page_config(layout="wide")
 from aaw import *
 from aaw.mysession import session
 from aaw.pages import *
@@ -15,11 +16,12 @@ session.update('page_map',dict(
     input_text = input_text,
     input_type = input_type,
 ))
-session.init('func_args', dict())
+
 session.init('page_widgets', dict())
 session.init('current_page', 'home') # only has effect when a new session starts, a new session starts when user refreshes the page
-session.update('feedback',None)
+session.init('feedback',None)
 session.init('title',None)
+session.init("prompt",False)
 
 for page in PAGES:
     page.__post_process__(session)

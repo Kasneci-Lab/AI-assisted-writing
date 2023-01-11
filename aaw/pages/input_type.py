@@ -10,7 +10,7 @@ def input_type():
     global __inputtypepage__
 
     __inputtypepage__.extend(li=[
-        st.markdown('''#### Do you want to upload a picture of your essay or input text manually?'''),
+        st.markdown('''# Do you want to upload a picture of your essay or input text manually?'''),
     ]
     )
 

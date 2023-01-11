@@ -3,10 +3,12 @@ from .mysession import session
 from .utils import valid_user_arguments
 
 
-def go_inputtext(**kwargs):
+def go_inputtext(prompt=False):
+    if prompt:
+        session.update("prompt",True)
 
     session.clear()
-    session.update('current_page', 'input_text',**kwargs)
+    session.update('current_page', 'input_text')
 
 def resubmit_essay():
     session.update('current_page','feedback')
@@ -38,9 +40,6 @@ def submit():
         print(input_type)
         raise NotImplementedError() # todo
 
-def preprocess_text():
-    session.clear()
-    session.update('current_page','feedback')
 
 def submit_essay(essay):
     session.update('text',essay)
@@ -50,3 +49,8 @@ def submit_essay(essay):
 def go_home():
     session.clear()
     session.update('current_page','home')
+    reset_state_vars()
+
+def reset_state_vars():
+    session.update('prompt',False)
+    session.update('feedback', None)
