@@ -9,7 +9,7 @@ from ..callbacks import go_home
 __feedbackpage__ = BasePage(name='feedback')
 
 def __getfeedback__(essay:str):
-    openai.api_key = "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" # todo: api
+    openai.api_key = "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" # todo: api
     prompt = '''Beim folgenden Text handelt es sich um einen Bericht von einer Schülerin zum Thema Corona. Gebe Tipps zur Ausdrucksweise wie ein Lehrer und gebe konkrete Verbessungsvorschläge. Text: """''' # todo
 
     input = prompt + essay + '''"""'''

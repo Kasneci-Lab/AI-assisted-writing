@@ -25,15 +25,14 @@ def upload_image():
     title_empty.markdown("# Upload a picture of your essay")
 
     uploaded_file = upload_file_empty.file_uploader("Choose a picture",type=['png','jpg','jpeg','webp'])
-    filename = uploaded_file.name
-
 
     if uploaded_file is not None:
-        print(f'''uploaded: {uploaded_file}''')
+        filename = uploaded_file.name
+        print(f'''uploaded: {filename}''')
         image = Image.open(uploaded_file)
         if not (filename.endswith('.jpg') or filename.endswith('.jpeg')):
             random_str = get_random_string(5)
-            filename = filename[0]+"_"+random_str+'.jpg'
+            filename = random_str+'123.jpg'
             image = image.convert('RGB')
             image.save(filename)
             image = Image.open(filename)
