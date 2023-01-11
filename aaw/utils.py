@@ -1,8 +1,20 @@
 from pathlib import Path
-import os
 PACKAGE_ROOT = str(Path(__package__).absolute())
-
+import random
+import string
 import streamlit as st
+
+
+
+def rmrf(path):
+    path = Path(path)
+    if path.exists():
+        if path.is_file():
+            path.unlink()
+        else:
+            for child in path.glob('*'):
+                rmrf(child)
+            path.rmdir()
 
 
 def readfile(path:str) -> str:
@@ -21,3 +33,11 @@ def valid_user_arguments(kwargs:dict)->bool:
 def error_and_stop(msg:str):
     st.error(msg)
     st.stop()
+
+
+
+def get_random_string(length):
+    # choose from all lowercase letter
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    print("Random string of length", length, "is:", result_str)

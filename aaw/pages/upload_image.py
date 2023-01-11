@@ -1,8 +1,10 @@
 from  PIL import Image
+from PIL.JpegImagePlugin import JpegImageFile
 import streamlit as st
 from ..globals import reader
 from .base import BasePage
 from ..callbacks import preprocess_text
+from ..utils import get_random_string, rmrf
 
 __uploadpage__ = BasePage(name='upload_image')
 
@@ -29,9 +31,19 @@ def upload_image():
     if uploaded_file is not None:
         print(f'''uploaded: {uploaded_file}''')
         image = Image.open(uploaded_file)
+        if not isinstance(image,JpegImageFile):
+            file_name = get_random_string(5)
+            image = image.convert('RGB')
+            image.save(f'{file_name}.jpg')
+            image = Image.open(f'{file_name}.jpg')
+
+        assert isinstance(image,JpegImageFile)
         with st.spinner('Recognizing...'):
             text = reader.readtext(image=image, detail=0)
             text = ' '.join(text)
+            file_name = image.filename
+            image.close()
+            rmrf(file_name)
         md_empty.markdown('**Please correct the mistakes:**')
         textarea_empty.text_area('', value=text, height=600,key='text')
         btn_empty.button('Done', on_click=preprocess_text)
