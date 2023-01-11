@@ -3,6 +3,9 @@ from .mysession import session
 from .utils import valid_user_arguments
 
 
+def resubmit_essay():
+    session.update('current_page','feedback')
+
 def go_inputtype():
     if not valid_user_arguments(session.get('user_args')):
         st.sidebar.error("Please enter complete arguments")
@@ -17,6 +20,7 @@ def go_inputtype():
     session.clear()
     session.update('title',title)
     session.update('current_page','input_type')
+
 
 def submit():
 

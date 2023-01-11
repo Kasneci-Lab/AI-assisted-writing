@@ -36,20 +36,32 @@ def feedback():
     input_empty = st.empty()
     fb_empty = st.empty()
     btn_empty = st.empty()
+
     widgets = [
         title_empty,
         input_empty,
         fb_empty,
-        btn_empty
+        btn_empty,
     ]
     __feedbackpage__.extend(li=widgets)
 
     title_empty.markdown("# Your Feedbacks")
-    input_empty.markdown(session.get('text'))
+    if session.has('text_tmp'):
+        essay = session.get('text_tmp')
+    else:
+        essay = session.get('text')
+    input_empty.markdown(essay)
     with st.spinner():
         feedback_text = __getfeedback__(session.get('text'))
         session.update('feedback', feedback_text)
         store_data()
     fb_empty.info(f'''{feedback_text}''')
+    input_empty.text_area(
+        label='You can also modify your essay and ask for new feedbacks!',
+        value=essay,
+        key='text_tmp',
+        # on_change=
+    )
     btn_empty.button("Reset", on_click=go_home)
+
 
