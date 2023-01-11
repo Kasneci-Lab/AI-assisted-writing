@@ -1,5 +1,4 @@
 from  PIL import Image
-from PIL.JpegImagePlugin import JpegImageFile
 import streamlit as st
 from ..globals import reader
 from .base import BasePage
@@ -26,24 +25,24 @@ def upload_image():
     title_empty.markdown("# Upload a picture of your essay")
 
     uploaded_file = upload_file_empty.file_uploader("Choose a picture",type=['png','jpg','jpeg','webp'])
+    filename = uploaded_file.name
 
 
     if uploaded_file is not None:
         print(f'''uploaded: {uploaded_file}''')
         image = Image.open(uploaded_file)
-        if not isinstance(image,JpegImageFile):
-            file_name = get_random_string(5)
+        if not (filename.endswith('.jpg') or filename.endswith('.jpeg')):
+            random_str = get_random_string(5)
+            filename = filename[0]+"_"+random_str+'.jpg'
             image = image.convert('RGB')
-            image.save(f'{file_name}.jpg')
-            image = Image.open(f'{file_name}.jpg')
+            image.save(filename)
+            image = Image.open(filename)
 
-        assert isinstance(image,JpegImageFile)
         with st.spinner('Recognizing...'):
             text = reader.readtext(image=image, detail=0)
             text = ' '.join(text)
-            file_name = image.filename
             image.close()
-            rmrf(file_name)
+            rmrf(filename)
         md_empty.markdown('**Please correct the mistakes:**')
         textarea_empty.text_area('', value=text, height=600,key='text')
         btn_empty.button('Done', on_click=preprocess_text)
