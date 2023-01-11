@@ -4,6 +4,7 @@ import openai
 import time
 from ..mysession import session
 from ..callbacks import go_home
+from ..utils import store_data
 
 
 __feedbackpage__ = BasePage(name='feedback')
@@ -47,6 +48,8 @@ def feedback():
     input_empty.markdown(session.get('text'))
     with st.spinner():
         feedback_text = __getfeedback__(session.get('text'))
+        session.update('feedback', feedback_text)
+        store_data()
     fb_empty.info(f'''{feedback_text}''')
     btn_empty.button("Reset", on_click=go_home)
 

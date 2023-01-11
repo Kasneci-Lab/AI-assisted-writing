@@ -3,6 +3,9 @@ PACKAGE_ROOT = str(Path(__package__).absolute())
 import random
 import string
 import streamlit as st
+from .mysession import session
+import pandas as pd
+from .globals import DATAPATH
 
 
 
@@ -41,3 +44,32 @@ def get_random_string(length) -> str:
     letters = string.ascii_lowercase
     result_str = ''.join(random.choice(letters) for i in range(length))
     return result_str
+
+
+def create_dataset():
+    directory = 'dataset'
+    p = Path(directory)
+    p.mkdir(parents=True, exist_ok=True)
+
+    filepath = p.joinpath('raw.csv')
+    if not filepath.exists():
+        df = pd.DataFrame(columns=['essay category', 'study year', 'essay text', 'feedback'])
+        df.to_csv(filepath, index=False)
+
+
+def store_data()->None:
+    '''
+    should be called after the feedback has been generated
+    :return: None
+    '''
+    feedback = session.get('feedback')
+    if feedback is not None:
+        df = pd.read_csv(DATAPATH)
+        newsample={
+            'essay category': session.get('user_args')['article_type'],
+            'study year': session.get('user_args')['study_year'],
+            'essay text': session.get('text'),
+            'feedback': session.get('feedback')
+        }
+        df=df.append(newsample,True)
+        df.to_csv(DATAPATH,index=False)

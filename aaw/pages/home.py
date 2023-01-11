@@ -11,13 +11,15 @@ def homepage():
 
     __homepage__.extend(li=[
         st.markdown('''# 👋 Hi, I'm your AI essay tutor :)'''),
-        st.markdown('''### Do you want to upload a picture of your essay or input text manually?'''),
+        st.markdown('''#### Do you want to upload a picture of your essay or input text manually?'''),
     ]
     )
 
     input_radio = st.empty()
     btn = st.empty()
-    __homepage__.extend(li=[input_radio, btn])
+    __homepage__.extend(li=[
+        input_radio,
+        btn])
 
     input_radio.radio("", INPUT_TYPES,key='input_type')
     btn.button(label='Next', on_click=submit)
