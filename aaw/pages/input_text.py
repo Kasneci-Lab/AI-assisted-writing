@@ -17,16 +17,18 @@ def input_text():
         btn_empty
     ])
 
-    title_empty.markdown("# Enter you essay here :)")
+
     prompt = session.get('prompt')
 
     if not prompt:
+        title_empty.markdown("# Enter you essay here :)")
         essay = textarea_empty.text_area(
             label='',
             placeholder="Ich liebe Schokoladen...",
             height=500,
         )
     else:
+        title_empty.markdown("# Modify your essay :)")
         col1,col2 = textarea_empty.columns([1,1])
         col1.markdown(f'''**Original Essay:**''')
         col1.info(session.get('text'))
@@ -35,7 +37,7 @@ def input_text():
             placeholder='change your essay here',
             height=500,
         )
-        expander= col1.expander('show feedbacks')
+        expander= col1.expander('feedbacks')
         expander.success(session.get('feedback'))
 
 
