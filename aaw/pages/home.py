@@ -12,7 +12,7 @@ def homepage():
     btn_empty = st.empty()
 
     titleheader_empty.markdown('''#### Please enter the title of your essay''')
-    title_empty.text_input('', placeholder='My Cool Title',key='title_tmp')
+    title_empty.text_input('title',label_visibility='collapsed', placeholder='My Cool Title',key='title_tmp')
     btn_empty.button('Next',on_click=go_inputtype)
 
     __homepage__.extend(li=[

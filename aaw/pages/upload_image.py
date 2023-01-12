@@ -24,7 +24,7 @@ def upload_image():
 
     title_empty.markdown("# Upload a picture of your essay")
 
-    uploaded_file = upload_file_empty.file_uploader("Choose a picture",type=['png','jpg','jpeg','webp'])
+    uploaded_file = upload_file_empty.file_uploader("Choose a picture",label_visibility='collapsed',type=['png','jpg','jpeg','webp'])
 
     if uploaded_file is not None:
         filename = uploaded_file.name
@@ -43,7 +43,7 @@ def upload_image():
             image.close()
             rmrf(filename)
         md_empty.markdown('**Please correct the mistakes:**')
-        essay= textarea_empty.text_area('', value=text, height=500)
+        essay= textarea_empty.text_area('essay',label_visibility='collapsed', value=text, height=500)
         btn_empty.button('Done', on_click=submit_essay,kwargs=dict(
             essay = essay
         ))

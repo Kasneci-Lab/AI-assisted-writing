@@ -24,6 +24,7 @@ def input_text():
         title_empty.markdown("# Enter you essay here :)")
         essay = textarea_empty.text_area(
             label='',
+            label_visibility='collapsed',
             placeholder="Ich liebe Schokoladen...",
             height=500,
         )

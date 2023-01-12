@@ -43,7 +43,7 @@ def render_sidebar():
 
 
     st.sidebar.markdown('## Choose the essay category')
-    article_type = st.sidebar.selectbox('Category',on_change=go_home,options=[
+    article_type = st.sidebar.selectbox('Category',on_change=go_home,label_visibility='collapsed',options=[
         'Bericht',
         'Erörterung',
         'Essay',
@@ -55,7 +55,8 @@ def render_sidebar():
         'Szenenanalyse',
     ])
 
-    study_year = st.sidebar.selectbox('Study year',options=['-']+list(range(1,14)),on_change=go_home)
+    st.sidebar.markdown('## Choose your study year')
+    study_year = st.sidebar.selectbox('Study year',label_visibility='collapsed',options=['-']+list(range(1,14)),on_change=go_home)
     st.session_state.user_args = dict(
         article_type = article_type,
         study_year = study_year
