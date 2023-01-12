@@ -1,4 +1,5 @@
 import streamlit as st
+from .sidebar import render_sidebar
 
 
 class BasePage:
@@ -6,7 +7,8 @@ class BasePage:
         self.__widgets__ = []
         self.__key__ = name
 
-
+    def sidebar(self):
+        render_sidebar()
 
     def __post_process__(self,session):
         if self.__key__ not in st.session_state.page_widgets.keys():

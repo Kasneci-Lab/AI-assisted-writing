@@ -5,6 +5,7 @@ from ..callbacks import go_inputtype
 __homepage__ = BasePage(name='home')
 
 def homepage():
+    __homepage__.sidebar()
     __homepage__.append(empty=st.markdown('''# 👋 Hi, I'm your AI essay tutor :)'''))
 
     titleheader_empty = st.empty()

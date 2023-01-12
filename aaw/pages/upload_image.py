@@ -8,6 +8,8 @@ __uploadpage__ = BasePage(name='upload_image')
 
 
 def upload_image():
+    __uploadpage__.sidebar()
+
     title_empty = st.empty()
     upload_file_empty = st.empty()
     upload_teacher_empty = st.empty()

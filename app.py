@@ -15,10 +15,14 @@ session.update('page_map',dict(
     feedback = feedback,
     input_text = input_text,
     input_type = input_type,
+    login = login,
 ))
 
+
+
+# only has effect when a new session starts, a new session starts when user refreshes the page
 session.init('page_widgets', dict())
-session.init('current_page', 'home') # only has effect when a new session starts, a new session starts when user refreshes the page
+session.init('current_page', 'login')
 session.init('feedback',None)
 session.init('title',None)
 session.init("prompt",False)
@@ -28,14 +32,14 @@ for page in PAGES:
     page.__post_process__(session)
 
 
-# sidebar
-debug = render_sidebar()
+# # sidebar
+# debug = render_sidebar()
 
 
-# debugging
-if debug:
-    if debug == 'Yes':
-        st.info(session.summary())
+# # debugging
+# if debug:
+#     if debug == 'Yes':
+#         st.info(session.summary())
 
 
 

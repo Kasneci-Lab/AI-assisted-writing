@@ -6,7 +6,7 @@ from ..mysession import session
 __inputtextpage__ = BasePage(name='input_text')
 
 def input_text():
-    global __inputtextpage__
+    __inputtextpage__.sidebar()
     title_empty = st.empty()
     textarea_empty = st.empty()
     btn_empty = st.empty()

@@ -32,6 +32,8 @@ def __getfeedback__(essay:str):
 
 
 def feedback():
+    __feedbackpage__.sidebar()
+
     title_empty = st.empty()
     input_empty = st.empty()
     fb_empty = st.empty()

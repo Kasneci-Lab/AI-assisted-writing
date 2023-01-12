@@ -48,10 +48,13 @@ def submit_essay(essay, teacher = None):
     if teacher is not None:
         session.update('teacher',teacher)
 
-def go_home():
+def go_home(rerun=False):
     session.clear()
     session.update('current_page','home')
     reset_state_vars()
+
+    if rerun:
+        st.experimental_rerun()
 
 def reset_state_vars():
     session.update('prompt',False)
