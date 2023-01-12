@@ -28,6 +28,9 @@ def input_text():
             placeholder="Ich liebe Schokoladen...",
             height=500,
         )
+        btn_empty.button("Submit", on_click=submit_essay, kwargs=dict(
+            essay=essay
+        ))
     else:
         title_empty.markdown("# Modify your essay :)")
         col1,col2 = textarea_empty.columns([1,1])
@@ -40,9 +43,10 @@ def input_text():
         )
         expander= col1.expander('feedbacks')
         expander.success(session.get('feedback'))
+        col2.button("Submit", on_click=submit_essay, kwargs=dict(
+            essay=essay
+        ))
 
 
-    btn_empty.button("Submit", on_click=submit_essay,kwargs=dict(
-        essay = essay
-    ))
+
 
