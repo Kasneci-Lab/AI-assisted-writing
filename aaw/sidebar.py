@@ -19,7 +19,7 @@ def render_sidebar():
     <img src="https://raw.githubusercontent.com/leoxiang66/streamlit-tutorial/IDP/widgets/static/tum.png" alt="TUM" width="150"/>
 
     <h1>
-    AI-Assisted Writting 
+    AI-Assisted Writing 
     </h1>
 
 
