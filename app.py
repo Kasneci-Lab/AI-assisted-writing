@@ -22,6 +22,7 @@ session.init('current_page', 'home') # only has effect when a new session starts
 session.init('feedback',None)
 session.init('title',None)
 session.init("prompt",False)
+session.init('teacher',None)
 
 for page in PAGES:
     page.__post_process__(session)

@@ -1,6 +1,6 @@
 import streamlit as st
 from .mysession import session
-from .utils import valid_user_arguments
+from .utils import valid_user_arguments, error_and_stop
 
 
 def go_inputtext(prompt=False):
@@ -15,13 +15,13 @@ def resubmit_essay():
 
 def go_inputtype():
     if not valid_user_arguments(session.get('user_args')):
-        st.sidebar.error("Please enter complete arguments")
+        error_and_stop("Please enter complete arguments")
         return
 
     session.update('title',session.get('title_tmp'))
     title = session.get('title')
     if title is None or title == '':
-        st.sidebar.error("Please enter the title")
+        error_and_stop("Please enter the title")
         return
 
     session.clear()
@@ -41,10 +41,12 @@ def submit():
         raise NotImplementedError() # todo
 
 
-def submit_essay(essay):
+def submit_essay(essay, teacher = None):
     session.update('text',essay)
     session.clear()
     session.update('current_page','feedback')
+    if teacher is not None:
+        session.update('teacher',teacher)
 
 def go_home():
     session.clear()

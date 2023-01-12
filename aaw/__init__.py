@@ -1,3 +1,3 @@
-from .sidebar import render_sidebar,valid_arguments
+from .sidebar import render_sidebar
 from .mysession import session
 from . import utils

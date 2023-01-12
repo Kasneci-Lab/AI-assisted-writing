@@ -6,6 +6,7 @@ import streamlit as st
 from .mysession import session
 import pandas as pd
 from .globals import DATAPATH
+from .globals import reader
 
 
 
@@ -34,8 +35,8 @@ def valid_user_arguments(kwargs:dict)->bool:
 
 
 def error_and_stop(msg:str):
-    st.error(msg)
-    st.stop()
+    st.sidebar.error(msg)
+    # st.stop()
 
 
 
@@ -53,7 +54,7 @@ def create_dataset():
 
     filepath = p.joinpath('raw.csv')
     if not filepath.exists():
-        df = pd.DataFrame(columns=['essay category', 'study year','title', 'essay text', 'feedback'])
+        df = pd.DataFrame(columns=['essay category', 'study year','title', 'essay text','teacher correction', 'feedback'])
         df.to_csv(filepath, index=False)
 
 
@@ -70,7 +71,13 @@ def store_data()->None:
             'study year': session.get('user_args')['study_year'],
             'title': session.get('title'),
             'essay text': session.get('text'),
+            'teacher correction': session.get('teacher'),
             'feedback': session.get('feedback')
         }
         df=df.append(newsample,True)
         df.to_csv(DATAPATH,index=False)
+
+def ocr(image)->str:
+    text = reader.readtext(image=image, detail=0)
+    text = ' '.join(text)
+    return text

@@ -2,13 +2,7 @@ import streamlit as st
 from .utils import error_and_stop
 from .callbacks import go_home
 
-def valid_arguments(kwargs):
-    # study-year
-    studyyear = kwargs['study_year']
-    if not isinstance(studyyear,int):
-        error_and_stop('Study year must be selected first.')
-        return False
-    return True
+
 
 
 
