@@ -35,7 +35,7 @@ def upload_image():
     essay_text = None
     teahcer_text = None
 
-    @st.cache
+    @st.cache(show_spinner=False)
     def __ocr_cache__(image):
         with st.spinner('Recognizing...'):
             text = ocr(image)
