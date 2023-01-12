@@ -30,7 +30,7 @@ class BasePage:
         return self.__widgets__[idx]
 
     def __str__(self):
-        ret = f'There are {len(self.__widgets__)} articles:\n'
+        ret = f'There are {len(self.__widgets__)} widgets:\n'
         for id, article in enumerate(self.__widgets__):
             ret += f'{id + 1}) '
             ret += f'{article}'
