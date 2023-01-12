@@ -7,7 +7,6 @@ __loginpage__ = BasePage(name='login')
 
 
 def login():
-    # st.set_page_config(layout="centered")
     psw_empty = st.empty()
     feedback_empty = st.empty()
     __loginpage__.append(empty=psw_empty)
