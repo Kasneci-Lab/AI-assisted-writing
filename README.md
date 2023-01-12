@@ -7,6 +7,7 @@
   ```
 
 ## Usage
+> passcode: abc
 ### use Docker
 ```angular2html
 sudo docker build -t ai-assisted-writting:0.1.0 .
