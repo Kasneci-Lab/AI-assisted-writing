@@ -1,6 +1,5 @@
 import streamlit as st
 st.set_page_config(layout="wide")
-from aaw import *
 from aaw.mysession import session
 from aaw.pages import *
 from aaw.utils import create_dataset
@@ -31,10 +30,6 @@ session.init('debug',False)
 
 for page in PAGES:
     page.__post_process__(session)
-
-
-# # sidebar
-# debug = render_sidebar()
 
 
 
