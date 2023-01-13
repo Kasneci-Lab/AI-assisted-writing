@@ -18,7 +18,7 @@ def render_sidebar():
 
 
     <code>
-    v0.1.0
+    v0.2.1
     </code>
 
 
