@@ -1,5 +1,6 @@
 import streamlit as st
 from ..callbacks import go_home
+from ..mysession import session
 
 
 
@@ -55,7 +56,9 @@ def render_sidebar():
         study_year = study_year
     )
 
-    return st.sidebar.selectbox('Debug', options=['No', 'Yes']) # todo: remove this line
-
+    if st.sidebar.selectbox('Debug', options=['No', 'Yes']) == 'Yes':
+        session.update('debug',True)
+    else:
+        session.update('debug', False)
 
 

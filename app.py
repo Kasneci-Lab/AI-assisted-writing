@@ -27,6 +27,7 @@ session.init('feedback',None)
 session.init('title',None)
 session.init("prompt",False)
 session.init('teacher',None)
+session.init('debug',False)
 
 for page in PAGES:
     page.__post_process__(session)
@@ -36,18 +37,15 @@ for page in PAGES:
 # debug = render_sidebar()
 
 
-# # debugging
-# if debug:
-#     if debug == 'Yes':
-#         st.info(session.summary())
-
-
 
 # render current page
-print(session.get_current_page())
+debug_empty = st.empty() #todo: remove debug
 session.render()
 
-
+# debugging
+debug = session.get('debug')
+if debug:
+    debug_empty.info(session.summary())
 
 
 
