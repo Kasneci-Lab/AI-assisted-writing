@@ -7,6 +7,7 @@ from .mysession import session
 import pandas as pd
 from .globals import DATAPATH
 from .globals import reader
+import csvkit
 
 
 
@@ -65,7 +66,7 @@ def store_data()->None:
     '''
     feedback = session.get('feedback')
     if feedback is not None:
-        df = pd.read_csv(DATAPATH)
+        # df = pd.read_csv(DATAPATH)
         newsample={
             'essay category': session.get('user_args')['article_type'],
             'study year': session.get('user_args')['study_year'],
@@ -74,8 +75,10 @@ def store_data()->None:
             'teacher correction': session.get('teacher'),
             'feedback': session.get('feedback')
         }
-        df=df.append(newsample,True)
-        df.to_csv(DATAPATH,index=False)
+        newsample = list(newsample.values())
+        csvkit.sync.sync_append(csv_filepath=DATAPATH,values=newsample)
+        # df=df.append(newsample,True)
+        # df.to_csv(DATAPATH,index=False)
 
 def ocr(image)->str:
     text = reader.readtext(image=image, detail=0)
