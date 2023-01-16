@@ -10,7 +10,6 @@ from .globals import reader
 import csvkit
 
 
-
 def rmrf(path):
     path = Path(path)
     if path.exists():

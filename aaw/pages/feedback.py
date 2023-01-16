@@ -5,12 +5,13 @@ import time
 from ..mysession import session
 from ..callbacks import go_home, go_inputtext
 from ..utils import store_data
+from ..globals import APIs
 
 
 __feedbackpage__ = BasePage(name='feedback')
 
 def __getfeedback__(essay:str):
-    openai.api_key = "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" # todo: api
+    openai.api_key = APIs["openai"]
     prompt = '''Beim folgenden Text handelt es sich um einen Bericht von einer Schülerin zum Thema Corona. Gebe Tipps zur Ausdrucksweise wie ein Lehrer und gebe konkrete Verbessungsvorschläge. Text: """''' # todo
 
     input = prompt + essay + '''"""'''
