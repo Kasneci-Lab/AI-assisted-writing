@@ -7,7 +7,7 @@ from .mysession import session
 import pandas as pd
 from .globals import DATAPATH
 from .globals import reader
-import csvkit
+#import csvkit
 
 
 def rmrf(path):
@@ -55,7 +55,8 @@ def create_dataset():
     filepath = p.joinpath('raw.csv')
     if not filepath.exists():
         df = pd.DataFrame(
-            columns=['essay category', 'study year', 'title', 'essay text', 'teacher correction', 'feedback'])
+            columns=['essay category', 'study year', 'school type', 'state',
+                     'title', 'essay text', 'teacher correction', 'feedback'])
         df.to_csv(filepath, index=False)
 
 
@@ -66,19 +67,21 @@ def store_data() -> None:
     """
     feedback = session.get('feedback')
     if feedback is not None:
-        # df = pd.read_csv(DATAPATH)
+        df = pd.read_csv(DATAPATH)
         new_sample = {
             'essay category': session.get('user_args')['article_type'],
             'study year': session.get('user_args')['study_year'],
+            'school type': session.get('user_args')['school_type'],
+            'state': session.get('user_args')['state'],
             'title': session.get('title'),
             'essay text': session.get('text'),
             'teacher correction': session.get('teacher'),
             'feedback': session.get('feedback')
         }
         new_sample = list(new_sample.values())
-        csvkit.sync.sync_append(csv_filepath=DATAPATH, values=new_sample)
-        # df=df.append(new_sample,True)
-        # df.to_csv(DATAPATH,index=False)
+        # csvkit.sync.sync_append(csv_filepath=DATAPATH, values=new_sample)
+        df=df.append(new_sample, True)
+        df.to_csv(DATAPATH, index=False)
 
 
 def ocr(image) -> str:

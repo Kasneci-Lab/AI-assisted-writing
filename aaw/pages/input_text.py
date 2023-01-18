@@ -2,6 +2,7 @@ from .base import BasePage
 import streamlit as st
 from ..callbacks import submit_essay
 from ..mysession import session
+from ..globals import STRINGS
 
 __inputtextpage__ = BasePage(name='input_text')
 
@@ -21,29 +22,29 @@ def input_text():
     prompt = session.get('prompt')
 
     if not prompt:
-        title_empty.markdown("# Enter you essay here :)")
+        title_empty.markdown("# {}".format(STRINGS["INPUT_TEXT_HEADER"]))
         essay = textarea_empty.text_area(
             label='',
             label_visibility='collapsed',
-            placeholder="Ich liebe Schokoladen...",
+            placeholder=STRINGS["INPUT_TEXT_PLACEHOLDER"],
             height=500,
         )
-        btn_empty.button("Submit", on_click=submit_essay, kwargs=dict(
+        btn_empty.button(STRINGS["INPUT_TEXT_BUTTON"], on_click=submit_essay, kwargs=dict(
             essay=essay
         ))
     else:
-        title_empty.markdown("# Modify your essay :)")
+        title_empty.markdown("# {}".format(STRINGS["INPUT_TEXT_MODIFY"]))
         col1, col2 = textarea_empty.columns([1, 1])
-        col1.markdown(f'''**Original Essay:**''')
+        col1.markdown('''**{}:**'''.format(STRINGS["INPUT_TEXT_ORIGINAL"]))
         col1.info(session.get('text'))
         essay = col2.text_area(
             label='',
-            placeholder='change your essay here',
+            placeholder=STRINGS["INPUT_TEXT_PLACEHOLDER_MODIFY"],
             height=500,
         )
-        expander= col1.expander('feedbacks')
+        expander = col1.expander('feedbacks')
         expander.success(session.get('feedback'))
-        col2.button("Submit", on_click=submit_essay, kwargs=dict(
+        col2.button(STRINGS["INPUT_TEXT_BUTTON"], on_click=submit_essay, kwargs=dict(
             essay=essay
         ))
 

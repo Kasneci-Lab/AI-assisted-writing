@@ -1,6 +1,7 @@
 import streamlit as st
 from .mysession import session
 from .utils import valid_user_arguments, error_and_stop
+from .globals import STRINGS
 
 
 def go_inputtext(prompt=False):
@@ -34,9 +35,9 @@ def go_inputtype():
 def submit():
     session.clear()
     input_type = session.get('input_type')
-    if input_type == 'Upload a picture':
+    if input_type == STRINGS["INPUT_TYPE_PICTURE"]:
         session.update('current_page', 'upload_image')
-    elif input_type == "Input text":
+    elif input_type == STRINGS["INPUT_TYPE_TEXT"]:
         session.update('current_page', 'input_text')
     else:
         print(input_type)

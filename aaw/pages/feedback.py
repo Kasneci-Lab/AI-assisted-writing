@@ -5,7 +5,7 @@ import time
 from ..mysession import session
 from ..callbacks import go_home, go_inputtext
 from ..utils import store_data
-from ..globals import APIs
+from ..globals import APIs, STRINGS
 
 __feedbackpage__ = BasePage(name='feedback')
 
@@ -49,7 +49,7 @@ def feedback():
     ]
     __feedbackpage__.extend(li=widgets)
 
-    title_empty.markdown("# Your Feedbacks")
+    title_empty.markdown("# {}".format(STRINGS["FEEDBACK_HEADER"]))
 
     essay = session.get('text')
     input_empty.info(essay)
@@ -58,5 +58,5 @@ def feedback():
         session.update('feedback', feedback_text)
         store_data()
     fb_empty.success(f'''{feedback_text}''')
-    btn_empty.button("Reset", on_click=go_home)
-    btn2_empty.button('Modify essay', on_click=go_inputtext, kwargs=dict(prompt=True))
+    btn_empty.button(STRINGS["FEEDBACK_RESET"], on_click=go_home)
+    btn2_empty.button(STRINGS["FEEDBACK_MODIFY"], on_click=go_inputtext, kwargs=dict(prompt=True))

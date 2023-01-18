@@ -19,7 +19,7 @@ session.update('page_map', dict(
 
 # only has effect when a new session starts, a new session starts when user refreshes the page
 session.init('page_widgets', dict())
-session.init('current_page', 'login')
+session.init('current_page', "home")  # 'login'
 session.init('feedback', None)
 session.init('title', None)
 session.init("prompt", False)
