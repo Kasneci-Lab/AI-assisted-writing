@@ -4,6 +4,7 @@ from ..callbacks import go_inputtype
 
 __homepage__ = BasePage(name='home')
 
+
 def homepage():
     __homepage__.sidebar()
     __homepage__.append(empty=st.markdown('''# 👋 Hi, I'm your AI essay tutor :)'''))
@@ -13,8 +14,8 @@ def homepage():
     btn_empty = st.empty()
 
     titleheader_empty.markdown('''#### Please enter the title of your essay''')
-    title_empty.text_input('title',label_visibility='collapsed', placeholder='My Cool Title',key='title_tmp')
-    btn_empty.button('Next',on_click=go_inputtype)
+    title_empty.text_input('title', label_visibility='collapsed', placeholder='My Cool Title', key='title_tmp')
+    btn_empty.button('Next', on_click=go_inputtype)
 
     __homepage__.extend(li=[
         titleheader_empty,

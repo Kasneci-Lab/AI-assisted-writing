@@ -5,28 +5,30 @@ from .utils import valid_user_arguments, error_and_stop
 
 def go_inputtext(prompt=False):
     if prompt:
-        session.update("prompt",True)
+        session.update("prompt", True)
 
     session.clear()
     session.update('current_page', 'input_text')
 
+
 def resubmit_essay():
-    session.update('current_page','feedback')
+    session.update('current_page', 'feedback')
+
 
 def go_inputtype():
     if not valid_user_arguments(session.get('user_args')):
         error_and_stop("Please enter complete arguments")
         return
 
-    session.update('title',session.get('title_tmp'))
+    session.update('title', session.get('title_tmp'))
     title = session.get('title')
     if title is None or title == '':
         error_and_stop("Please enter the title")
         return
 
     session.clear()
-    session.update('title',title)
-    session.update('current_page','input_type')
+    session.update('title', title)
+    session.update('current_page', 'input_type')
 
 
 def submit():
@@ -38,24 +40,26 @@ def submit():
         session.update('current_page', 'input_text')
     else:
         print(input_type)
-        raise NotImplementedError() # todo
+        raise NotImplementedError()  # todo
 
 
-def submit_essay(essay, teacher = None):
-    session.update('text',essay)
+def submit_essay(essay, teacher=None):
+    session.update('text', essay)
     session.clear()
-    session.update('current_page','feedback')
+    session.update('current_page', 'feedback')
     if teacher is not None:
-        session.update('teacher',teacher)
+        session.update('teacher', teacher)
+
 
 def go_home(rerun=False):
     session.clear()
-    session.update('current_page','home')
+    session.update('current_page', 'home')
     reset_state_vars()
 
     if rerun:
         st.experimental_rerun()
 
+
 def reset_state_vars():
-    session.update('prompt',False)
+    session.update('prompt', False)
     session.update('feedback', None)

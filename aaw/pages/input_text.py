@@ -5,6 +5,7 @@ from ..mysession import session
 
 __inputtextpage__ = BasePage(name='input_text')
 
+
 def input_text():
     __inputtextpage__.sidebar()
     title_empty = st.empty()
@@ -16,7 +17,6 @@ def input_text():
         textarea_empty,
         btn_empty
     ])
-
 
     prompt = session.get('prompt')
 
@@ -33,7 +33,7 @@ def input_text():
         ))
     else:
         title_empty.markdown("# Modify your essay :)")
-        col1,col2 = textarea_empty.columns([1,1])
+        col1, col2 = textarea_empty.columns([1, 1])
         col1.markdown(f'''**Original Essay:**''')
         col1.info(session.get('text'))
         essay = col2.text_area(

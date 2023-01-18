@@ -1,5 +1,6 @@
+python==3.10.9
 easyocr==1.6.2
-Pillow==9.4.0
+Pillow==9.3.0
 streamlit==1.16.0
-openai
-csv.py==0.5.2
+openai==0.26.0
+csvkit==1.0.4

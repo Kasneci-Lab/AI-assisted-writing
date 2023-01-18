@@ -28,7 +28,6 @@ class MySession:
         else:
             return None
 
-
     def summary(self):
         tmp = self.to_dict()
         num = len(tmp.keys())

@@ -6,13 +6,13 @@ import streamlit as st
 
 __inputtypepage__ = BasePage(name='input_type')
 
+
 def input_type():
     __inputtypepage__.sidebar()
 
     __inputtypepage__.extend(li=[
         st.markdown('''# Do you want to upload a picture of your essay or input text manually?'''),
-    ]
-    )
+    ])
 
     input_radio = st.empty()
     btn = st.empty()

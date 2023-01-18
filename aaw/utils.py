@@ -21,23 +21,23 @@ def rmrf(path):
             path.rmdir()
 
 
-def readfile(path:str) -> str:
+def readfile(path: str) -> str:
     with open(path) as f:
         ret = f.read()
     return ret
 
-def valid_user_arguments(kwargs:dict)->bool:
+
+def valid_user_arguments(kwargs: dict) -> bool:
     # study-year
     studyyear = kwargs['study_year']
-    if not isinstance(studyyear,int):
+    if not isinstance(studyyear, int):
         return False
     return True
 
 
-def error_and_stop(msg:str):
+def error_and_stop(msg: str):
     st.sidebar.error(msg)
     # st.stop()
-
 
 
 def get_random_string(length) -> str:
@@ -54,19 +54,20 @@ def create_dataset():
 
     filepath = p.joinpath('raw.csv')
     if not filepath.exists():
-        df = pd.DataFrame(columns=['essay category', 'study year','title', 'essay text','teacher correction', 'feedback'])
+        df = pd.DataFrame(
+            columns=['essay category', 'study year', 'title', 'essay text', 'teacher correction', 'feedback'])
         df.to_csv(filepath, index=False)
 
 
-def store_data()->None:
-    '''
+def store_data() -> None:
+    """
     should be called after the feedback has been generated
     :return: None
-    '''
+    """
     feedback = session.get('feedback')
     if feedback is not None:
         # df = pd.read_csv(DATAPATH)
-        newsample={
+        new_sample = {
             'essay category': session.get('user_args')['article_type'],
             'study year': session.get('user_args')['study_year'],
             'title': session.get('title'),
@@ -74,12 +75,13 @@ def store_data()->None:
             'teacher correction': session.get('teacher'),
             'feedback': session.get('feedback')
         }
-        newsample = list(newsample.values())
-        csvkit.sync.sync_append(csv_filepath=DATAPATH,values=newsample)
-        # df=df.append(newsample,True)
+        new_sample = list(new_sample.values())
+        csvkit.sync.sync_append(csv_filepath=DATAPATH, values=new_sample)
+        # df=df.append(new_sample,True)
         # df.to_csv(DATAPATH,index=False)
 
-def ocr(image)->str:
+
+def ocr(image) -> str:
     text = reader.readtext(image=image, detail=0)
     text = ' '.join(text)
     return text

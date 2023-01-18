@@ -1,4 +1,4 @@
-from  PIL import Image
+from PIL import Image
 import streamlit as st
 from .base import BasePage
 from ..callbacks import submit_essay
@@ -28,20 +28,21 @@ def upload_image():
 
     title_empty.markdown("# Upload a picture of your essay")
 
-    essay_picture = upload_file_empty.file_uploader("**Upload a picture of your essay**",type=['png','jpg','jpeg','webp'])
-    teacher_picture = upload_teacher_empty.file_uploader("**(optional) Upload a picture of teacher's correction**",
+    essay_picture = upload_file_empty.file_uploader("**Upload a picture of your essay**",
                                                     type=['png', 'jpg', 'jpeg', 'webp'])
+    teacher_picture = upload_teacher_empty.file_uploader("**(optional) Upload a picture of teacher's correction**",
+                                                         type=['png', 'jpg', 'jpeg', 'webp'])
 
     essay_text = None
-    teahcer_text = None
+    teacher_text = None
 
     @st.cache(show_spinner=False)
-    def __ocr_cache__(image):
+    def __ocr_cache__(image_input):
         with st.spinner('Recognizing...'):
-            text = ocr(image)
-            image.close()
+            text_output = ocr(image_input)
+            image_input.close()
             rmrf(filename)
-        return text
+        return text_output
 
     if essay_picture is not None:
         filename = essay_picture.name
@@ -58,7 +59,6 @@ def upload_image():
         md_empty.markdown('### Please correct the OCR mistakes:')
         essay_text = textarea_empty.text_area('**Essay**', value=text, height=500)
 
-
     if teacher_picture is not None:
         filename = teacher_picture.name
         print(f'''uploaded: {filename}''')
@@ -71,12 +71,10 @@ def upload_image():
             image = Image.open(filename)
 
         text = __ocr_cache__(image)
-        teahcer_text = teacher_empty.text_area('**Teacher correction**', value=text, height=200)
+        teacher_text = teacher_empty.text_area('**Teacher correction**', value=text, height=200)
 
     if essay_picture is not None:
-        btn_empty.button("Done",on_click=submit_essay,kwargs=dict(
-            essay = essay_text,
-            teacher = teahcer_text
+        btn_empty.button("Done", on_click=submit_essay, kwargs=dict(
+            essay=essay_text,
+            teacher=teacher_text
         ))
-
-

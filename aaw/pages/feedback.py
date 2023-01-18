@@ -7,20 +7,21 @@ from ..callbacks import go_home, go_inputtext
 from ..utils import store_data
 from ..globals import APIs
 
-
 __feedbackpage__ = BasePage(name='feedback')
 
-def __getfeedback__(essay:str):
-    openai.api_key = APIs["openai"]
-    prompt = '''Beim folgenden Text handelt es sich um einen Bericht von einer Schülerin zum Thema Corona. Gebe Tipps zur Ausdrucksweise wie ein Lehrer und gebe konkrete Verbessungsvorschläge. Text: """''' # todo
 
-    input = prompt + essay + '''"""'''
+def __get_feedback__(essay: str):
+    openai.api_key = APIs["openai"]
+    prompt = '''Beim folgenden Text handelt es sich um einen Bericht von einer Schülerin zum Thema Corona. 
+    Gebe Tipps zur Ausdrucksweise wie ein Lehrer und gebe konkrete Verbessungsvorschläge. Text: """'''  # todo
+
+    total_input = prompt + essay + '''"""'''
     error_tmp = st.empty()
 
     # create a completion
     while True:
         try:
-            completion = openai.Completion.create(engine="text-davinci-003", prompt=input, max_tokens=512)
+            completion = openai.Completion.create(engine="text-davinci-003", prompt=total_input, max_tokens=512)
             break
         except Exception as e:
             error_tmp.error(str(e))
@@ -31,7 +32,6 @@ def __getfeedback__(essay:str):
     return completion.choices[0].text
 
 
-
 def feedback():
     __feedbackpage__.sidebar()
 
@@ -40,7 +40,6 @@ def feedback():
     fb_empty = st.empty()
     btn2_empty = st.empty()
     btn_empty = st.empty()
-
 
     widgets = [
         title_empty,
@@ -55,13 +54,9 @@ def feedback():
     essay = session.get('text')
     input_empty.info(essay)
     with st.spinner():
-        feedback_text = __getfeedback__(session.get('text'))
+        feedback_text = __get_feedback__(session.get('text'))
         session.update('feedback', feedback_text)
         store_data()
     fb_empty.success(f'''{feedback_text}''')
     btn_empty.button("Reset", on_click=go_home)
-    btn2_empty.button('Modify essay', on_click=go_inputtext,kwargs=dict(
-        prompt = True
-    ))
-
-
+    btn2_empty.button('Modify essay', on_click=go_inputtext, kwargs=dict(prompt=True))
