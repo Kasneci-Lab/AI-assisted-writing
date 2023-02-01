@@ -8,8 +8,10 @@ def render_sidebar():
     sidebar_markdown = '''
 
     <center>
-    <img src="https://raw.githubusercontent.com/leoxiang66/streamlit-tutorial/IDP/widgets/static/tum.png" alt="TUM" 
+    <a href=/>
+        <img src="https://raw.githubusercontent.com/leoxiang66/streamlit-tutorial/IDP/widgets/static/tum.png" alt="TUM" 
     width="150"/>
+    </a>
 
     <h1>
     {header}
@@ -25,10 +27,10 @@ def render_sidebar():
 
 
     <center>
-    <a href="https://github.com/leoxiang66/ai-assisted-writing">
+    <a href="https://github.com/Kasneci-Lab/AI-assisted-writing">
     <img src = "https://cdn-icons-png.flaticon.com/512/733/733609.png" width="23"></img></a>
     
-    <a href="mailto:xiang.tao@outlook.de">
+    <a href="mailto:kathrin.sessler@tum.de">
     <img src="https://cdn-icons-png.flaticon.com/512/646/646094.png" alt="email" width = "27" ></a>
     </center>
 
