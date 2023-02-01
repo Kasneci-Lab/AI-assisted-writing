@@ -1,7 +1,7 @@
 # ai-assisted-writing
 
 ## Requirements
-- python=3.7
+- python=3.10
 - ```
   pip install requirements.txt
   ```
@@ -14,7 +14,9 @@ create a `.api.json` file under the project root.
 An example:
 ```
 {
-  "openai": "api1"
+  "openai": "sk-...",
+  "ocr_app_id": "...",
+  "ocr_app_key": "..."
 }
 ```
 
