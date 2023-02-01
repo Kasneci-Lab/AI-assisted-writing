@@ -1,30 +1,39 @@
-from pathlib import Path
-PACKAGE_ROOT = str(Path(__package__).absolute())
+import os
+import glob
+
 import random
 import string
 import streamlit as st
-from .mysession import session
 import pandas as pd
-from .globals import DATAPATH
-from .globals import reader
-#import csvkit
+
+import requests
+import openai
+import time
+
+from pdf2image import convert_from_path
+from PIL import Image
+from pathlib import Path
+
+PACKAGE_ROOT = str(Path(__package__).absolute())
+from .mysession import session
+from .globals import DATAPATH, APIs
 
 
-def rmrf(path):
-    path = Path(path)
-    if path.exists():
-        if path.is_file():
-            path.unlink()
-        else:
-            for child in path.glob('*'):
-                rmrf(child)
-            path.rmdir()
+# def rmrf(path):
+#     path = Path(path)
+#     if path.exists():
+#         if path.is_file():
+#             path.unlink()
+#         else:
+#             for child in path.glob('*'):
+#                 rmrf(child)
+#             path.rmdir()
 
 
-def readfile(path: str) -> str:
-    with open(path) as f:
-        ret = f.read()
-    return ret
+# def readfile(path: str) -> str:
+#     with open(path) as f:
+#         ret = f.read()
+#     return ret
 
 
 def valid_user_arguments(kwargs: dict) -> bool:
@@ -56,7 +65,7 @@ def create_dataset():
     if not filepath.exists():
         df = pd.DataFrame(
             columns=['essay category', 'study year', 'school type', 'state',
-                     'title', 'essay text', 'teacher correction', 'feedback'])
+                     'title', 'essay text', 'feedback'])  # 'teacher correction',
         df.to_csv(filepath, index=False)
 
 
@@ -75,16 +84,106 @@ def store_data() -> None:
             'state': session.get('user_args')['state'],
             'title': session.get('title'),
             'essay text': session.get('text'),
-            'teacher correction': session.get('teacher'),
+            # 'teacher correction': session.get('teacher'),
             'feedback': session.get('feedback')
         }
         new_sample = list(new_sample.values())
         # csvkit.sync.sync_append(csv_filepath=DATAPATH, values=new_sample)
-        df=df.append(new_sample, True)
+        df = df.append(new_sample, True)
         df.to_csv(DATAPATH, index=False)
 
 
-def ocr(image) -> str:
-    text = reader.readtext(image=image, detail=0)
-    text = ' '.join(text)
+def image_to_text(image) -> str:
+
+    # Step 1: Save uploaded file
+    filename = image.name
+    print(f'''uploaded: {filename}''')
+
+    image_type = filename.split(".")[-1]
+    print("Image type: " + image_type)
+    bytes_data = image.getvalue()
+
+    path = "dataset/raw_data/" + filename
+
+    # Save bytes
+    with open(path, 'wb') as f:
+        f.write(bytes_data)
+
+    # Step 2: Convert file to jpg-format
+    # Todo: Enable to upload multiple images!
+    num_requests = 1
+    random_str = get_random_string(5)
+
+    if image_type == "pdf":
+        # Convert pdf to image
+        images = convert_from_path(path)
+
+        # Save images to temporary file
+        for i in range(len(images)):
+            images[i].save("tmp/" + str(random_str) + str(i) + '.jpg', 'JPEG')
+            images[i].close()
+
+        num_requests = len(images)
+    else:
+        # Save images to temporary file
+        image_pillow = Image.open(path)
+        image_pillow = image_pillow.convert('RGB')
+        image_pillow.save("tmp/" + str(random_str) + '0.jpg', 'JPEG')
+        image_pillow.close()
+
+    # Step 3: Call OCR Software
+    print("Calling OCR API...")
+    ocr_text = ocr(random_str, num_requests)
+
+    print(ocr_text)
+
+    # Remove the temporary files again
+    for filename in glob.glob("tmp/" + random_str + "*"):
+        os.remove(filename)
+
+    # Step 4: Use GPT-3 to improve the text
+    print("Calling GPT-3....")
+    prompt = "Dieser Text wurde von einer automatischen Handschrifterkennung erfasst. " \
+             "Passe die Fehler an: "
+    total_input = prompt + '''"""''' + ocr_text + '''"""'''
+
+    text = run_gpt3(total_input)
+    text = text.strip()
     return text
+
+
+def ocr(image_name: str, num_requests=1) -> str:
+    output_text = []
+
+    for i in range(num_requests):
+        r = requests.post("https://api.mathpix.com/v3/text",
+                          files={"file": open("tmp/" + image_name + str(i) + '.jpg', "rb")},
+                          headers={
+                              "app_id": APIs["ocr_app_id"],
+                              "app_key": APIs["ocr_app_key"]
+                          }
+                          )
+        output_text.append(r.json()["text"])
+
+    total_output = " ".join(output_text)
+    return total_output
+
+
+def run_gpt3(prompt: str, engine="text-davinci-003", max_tokens=1000, error_tmp=None):
+    openai.api_key = APIs["openai"]
+
+    # create a completion
+    while True:
+        try:
+            completion = openai.Completion.create(engine=engine, prompt=prompt, max_tokens=max_tokens)
+            break
+        except Exception as e:
+            print(str(e))
+            if error_tmp:
+                error_tmp.error(str(e))
+            time.sleep(5)
+            if error_tmp:
+                error_tmp.empty()
+
+    # return the completion
+    return completion.choices[0].text
