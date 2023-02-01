@@ -1,6 +1,6 @@
 from .base import BasePage
 import streamlit as st
-from ..callbacks import submit_essay
+from ..callbacks import submit_essay, go_inputtype
 from ..mysession import session
 from ..globals import STRINGS
 
@@ -12,14 +12,18 @@ def input_text():
     title_empty = st.empty()
     textarea_empty = st.empty()
     btn_empty = st.empty()
+    btn_back = st.empty()
 
     __inputtextpage__.extend(li=[
         title_empty,
         textarea_empty,
-        btn_empty
+        btn_empty,
+        btn_back
     ])
 
     prompt = session.get('prompt')
+
+    btn_back.button(label=STRINGS["BUTTON_BACK"], on_click=go_inputtype)
 
     if not prompt:
         title_empty.markdown("# {}".format(STRINGS["INPUT_TEXT_HEADER"]))

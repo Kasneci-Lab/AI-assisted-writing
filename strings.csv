@@ -1,7 +1,7 @@
 Variable,en,de
-HOME_HEADER,"👋 Hi, I'm your AI essay tutor :)","👋 Hallo! Hier ist Dein KI Tutor für Aufsätze :)"
-HOME_TITLE_HEADER,Please enter the title of your essay,"Gib hier den Titel deines Aufsatzes ein"
-HOME_TITLE_PLACEHOLDER,"My cool title","Mein cooler Titel"
+HOME_HEADER,"👋 Hi, I'm your AI essay tutor :)","👋 Hallo, hier ist dein KI-Tutor! :)"
+HOME_TITLE_HEADER,Please enter the title of your essay,"Ich helfe dir beim Schreiben von Aufsätzen"
+HOME_TITLE_PLACEHOLDER,"My cool title","Gib hier den Titel oder das Thema deines Aufsatzes ein"
 HOME_TITLE_BUTTON,"Next","Weiter"
 SIDEBAR_HEADER,"AI-Assisted Writing","KI-gestütztes Schreiben"
 SIDEBAR_CATEGORY,Choose the essay category,"Wähle deinen Aufsatztyp"
@@ -32,4 +32,4 @@ FEEDBACK_MODIFY,"Modify essay","Aufsatz bearbeiten"
 LOGIN_HEADER,"Please enter the passcode","Passwort eingeben"
 LOGIN_SUCCESS,"The passcode is correct. You will be redirected to the app soon...","Das Passwort ist korrekt. Du wirst automatisch weitergeleitet..."
 LOGIN_FAILURE,"The passcode is wrong.","Das eingegebene Passwort ist falsch."
-,,
+BUTTON_BACK,Back,Zurück

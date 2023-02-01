@@ -21,7 +21,11 @@ def go_inputtype():
         error_and_stop("Please enter complete arguments")
         return
 
-    session.update('title', session.get('title_tmp'))
+    title_tmp = session.get('title_tmp')
+
+    if title_tmp:
+        session.update('title', title_tmp)
+
     title = session.get('title')
     if title is None or title == '':
         error_and_stop("Please enter the title")

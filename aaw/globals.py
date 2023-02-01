@@ -3,7 +3,6 @@ from pathlib import Path
 import json
 import pandas as pd
 
-
 def __read_apis__():
     API_PATH = Path('.api.json')
     with open(API_PATH, 'r', encoding='UTF-8') as f:

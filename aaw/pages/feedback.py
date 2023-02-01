@@ -1,35 +1,24 @@
 from .base import BasePage
 import streamlit as st
-import openai
-import time
 from ..mysession import session
-from ..callbacks import go_home, go_inputtext
-from ..utils import store_data
-from ..globals import APIs, STRINGS
+from ..callbacks import go_home, go_inputtext, submit
+from ..utils import store_data, run_gpt3
+from ..globals import STRINGS
 
 __feedbackpage__ = BasePage(name='feedback')
 
 
 def __get_feedback__(essay: str):
-    openai.api_key = APIs["openai"]
     prompt = '''Beim folgenden Text handelt es sich um einen Bericht von einer Schülerin zum Thema Corona. 
     Gebe Tipps zur Ausdrucksweise wie ein Lehrer und gebe konkrete Verbessungsvorschläge. Text: """'''  # todo
 
     total_input = prompt + essay + '''"""'''
-    error_tmp = st.empty()
 
-    # create a completion
-    while True:
-        try:
-            completion = openai.Completion.create(engine="text-davinci-003", prompt=total_input, max_tokens=512)
-            break
-        except Exception as e:
-            error_tmp.error(str(e))
-            time.sleep(5)
-            error_tmp.empty()
+    print("Total input")
+    print(total_input)
 
     # return the completion
-    return completion.choices[0].text
+    return run_gpt3(total_input, error_tmp=st.empty())
 
 
 def feedback():
@@ -40,12 +29,14 @@ def feedback():
     fb_empty = st.empty()
     btn2_empty = st.empty()
     btn_empty = st.empty()
+    # btn_back = st.empty()
 
     widgets = [
         title_empty,
         input_empty,
         fb_empty,
         btn_empty,
+        # btn_back
     ]
     __feedbackpage__.extend(li=widgets)
 
@@ -53,6 +44,9 @@ def feedback():
 
     essay = session.get('text')
     input_empty.info(essay)
+
+    # btn_back.button(label=STRINGS["BUTTON_BACK"], on_click=submit)
+
     with st.spinner():
         feedback_text = __get_feedback__(session.get('text'))
         session.update('feedback', feedback_text)
