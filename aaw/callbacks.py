@@ -1,22 +1,20 @@
 import streamlit as st
 from .mysession import session
-from .utils import valid_user_arguments, error_and_stop
 from .globals import STRINGS
 
 
-def go_inputtext(prompt=False):
-    # if prompt:
-    #    session.update("prompt", True)
-
+def go_home(keep_state=False):
     session.clear()
-    session.update('current_page', 'input_text')
+    session.update('current_page', 'home')
+
+    if not keep_state:
+        session.update('feedback', None)
+        session.update('title', None)
+        session.update("user_args", dict())
+        session.update("input_type", None)
 
 
-def resubmit_essay():
-    session.update('current_page', 'feedback')
-
-
-def go_inputtype():
+def go_input_type():
     # Check if there is a new title entered
     title_tmp = session.get('title_tmp')
 
@@ -27,7 +25,7 @@ def go_inputtype():
     # Verify there is a title set
     title = session.get('title')
     if title is None or title == '':
-        error_and_stop("Please enter the title")
+        st.error(STRINGS["ERROR_TITLE_MISSING"])
         return
 
     # Set all further variables
@@ -45,13 +43,14 @@ def go_inputtype():
     session.update('current_page', 'input_type')
 
 
-def submit():
+def choose_input_type():
     tmp_input_type = session.get("tmp_input_type")
     if tmp_input_type:
         session.update('input_type', tmp_input_type)
 
     input_type = session.get("input_type")
 
+    # Save all new values
     session.clear()
     session.update('input_type', input_type)
     if input_type == STRINGS["INPUT_TYPE_PICTURE"]:
@@ -63,23 +62,7 @@ def submit():
         raise NotImplementedError()  # todo
 
 
-def submit_essay(essay, teacher=None):
+def submit_essay(essay):
     session.update('text', essay)
     session.clear()
     session.update('current_page', 'feedback')
-    if teacher is not None:
-        session.update('teacher', teacher)
-
-
-def go_home(rerun=False):
-    # session.clear()
-    session.update('current_page', 'home')
-    reset_state_vars()
-
-    if rerun:
-        st.experimental_rerun()
-
-
-def reset_state_vars():
-    session.update('prompt', False)
-    session.update('feedback', None)

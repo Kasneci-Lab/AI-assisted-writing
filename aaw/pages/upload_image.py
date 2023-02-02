@@ -1,6 +1,6 @@
 import streamlit as st
 from .base import BasePage
-from ..callbacks import submit_essay, go_inputtype
+from ..callbacks import submit_essay, go_input_type
 from ..utils import image_to_text
 from ..globals import STRINGS
 
@@ -8,6 +8,10 @@ __uploadpage__ = BasePage(name='upload_image')
 
 
 def upload_image():
+    #########################
+    # Set up page structure #
+    #########################
+
     __uploadpage__.sidebar()
 
     title_empty = st.empty()
@@ -22,12 +26,16 @@ def upload_image():
     with col2:
         btn = st.empty()
 
+    #############################
+    # Fill all empty containers #
+    #############################
+
     title_empty.markdown("# {}".format(STRINGS["UPLOAD_IMAGE_HEADER"]))
 
     essay_picture = upload_file_empty.file_uploader("**{}**".format(STRINGS["UPLOAD_IMAGE_ESSAY"]),
                                                     type=['png', 'jpg', 'jpeg', 'pdf'])
 
-    btn_back.button(label=STRINGS["BUTTON_BACK"], on_click=go_inputtype)
+    btn_back.button(label=STRINGS["BUTTON_BACK"], on_click=go_input_type)
 
     essay_text = None
 

@@ -1,6 +1,6 @@
 import streamlit as st
 from .base import BasePage
-from ..callbacks import go_inputtype
+from ..callbacks import go_input_type
 from ..globals import STRINGS
 
 __homepage__ = BasePage(name='home')
@@ -109,4 +109,4 @@ def homepage():
                                      'Thüringen'
                                  ], key='state')
 
-    btn_empty.button(STRINGS["HOME_TITLE_BUTTON"], on_click=go_inputtype)
+    btn_empty.button(STRINGS["HOME_TITLE_BUTTON"], on_click=go_input_type)

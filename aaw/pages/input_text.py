@@ -1,13 +1,16 @@
 from .base import BasePage
 import streamlit as st
-from ..callbacks import submit_essay, go_inputtype
-from ..mysession import session
+from ..callbacks import submit_essay, go_input_type
 from ..globals import STRINGS
 
 __inputtextpage__ = BasePage(name='input_text')
 
 
 def input_text():
+    #########################
+    # Set up page structure #
+    #########################
+
     __inputtextpage__.sidebar()
     title_empty = st.empty()
     textarea_empty = st.empty()
@@ -19,6 +22,10 @@ def input_text():
     with col2:
         btn = st.empty()
 
+    #############################
+    # Fill all empty containers #
+    #############################
+
     title_empty.markdown("# {}".format(STRINGS["INPUT_TEXT_HEADER"]))
 
     essay = textarea_empty.text_area(
@@ -29,4 +36,4 @@ def input_text():
     )
 
     btn.button(STRINGS["INPUT_TEXT_BUTTON"], on_click=submit_essay, kwargs=dict(essay=essay))
-    btn_back.button(label=STRINGS["BUTTON_BACK"], on_click=go_inputtype)
+    btn_back.button(label=STRINGS["BUTTON_BACK"], on_click=go_input_type)

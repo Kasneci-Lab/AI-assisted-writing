@@ -34,4 +34,5 @@ FEEDBACK_MODIFY,"Modify essay","Aufsatz bearbeiten"
 LOGIN_HEADER,"Please enter the passcode","Passwort eingeben"
 LOGIN_SUCCESS,"The passcode is correct. You will be redirected to the app soon...","Das Passwort ist korrekt. Du wirst automatisch weitergeleitet..."
 LOGIN_FAILURE,"The passcode is wrong.","Das eingegebene Passwort ist falsch."
-BUTTON_BACK,Back,Zurück
+BUTTON_BACK,"Back","Zurück"
+ERROR_TITLE_MISSING,"Please enter the title","Bitte gib einen Titel ein"
