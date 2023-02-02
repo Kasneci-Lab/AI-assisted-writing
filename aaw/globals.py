@@ -22,7 +22,6 @@ def __get_strings__(lang):
 # ToDo: Get the language dynamically!
 language = "de"
 
-# reader = easyocr.Reader([language])
 STRINGS = __get_strings__(language)
 
 INPUT_TYPES = [STRINGS["INPUT_TYPE_PICTURE"], STRINGS["INPUT_TYPE_TEXT"]]

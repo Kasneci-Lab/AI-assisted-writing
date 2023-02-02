@@ -46,8 +46,14 @@ def go_inputtype():
 
 
 def submit():
+    tmp_input_type = session.get("tmp_input_type")
+    if tmp_input_type:
+        session.update('input_type', tmp_input_type)
+
+    input_type = session.get("input_type")
+
     session.clear()
-    input_type = session.get('input_type')
+    session.update('input_type', input_type)
     if input_type == STRINGS["INPUT_TYPE_PICTURE"]:
         session.update('current_page', 'upload_image')
     elif input_type == STRINGS["INPUT_TYPE_TEXT"]:

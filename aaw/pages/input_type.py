@@ -15,14 +15,16 @@ def input_type():
     ])
 
     input_radio = st.empty()
-    btn = st.empty()
-    btn_back = st.empty()
-    __inputtypepage__.extend(li=[
-        input_radio,
-        btn,
-        btn_back])
 
-    input_radio.radio("", INPUT_TYPES, key='input_type')
+    col1, col2 = st.columns(2)
+
+    with col1:
+        btn_back = st.empty()
+    with col2:
+        btn = st.empty()
+
+    input_radio.radio("input_type", INPUT_TYPES, key='tmp_input_type', label_visibility="collapsed")
+
     btn.button(label=STRINGS["INPUT_TYPE_BUTTON"], on_click=submit)
     btn_back.button(label=STRINGS["BUTTON_BACK"], on_click=go_home)
 

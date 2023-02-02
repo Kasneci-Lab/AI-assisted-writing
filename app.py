@@ -23,9 +23,7 @@ session.init('current_page', "home")  # 'login'
 session.init('feedback', None)
 session.init('title', None)
 session.init("user_args", dict())
-# session.init("prompt", False)
-# session.init('teacher', None)
-# session.init('debug', False)
+session.init("input_type", None)
 
 for page in PAGES:
     page.__post_process__(session)

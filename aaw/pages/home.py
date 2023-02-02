@@ -110,17 +110,3 @@ def homepage():
                                  ], key='state')
 
     btn_empty.button(STRINGS["HOME_TITLE_BUTTON"], on_click=go_inputtype)
-
-    # __homepage__.extend(li=[
-    #    title_header_empty,
-    #    title_choice_empty,
-    #    btn_empty
-    # ])
-
-    #
-    # st.session_state.user_args = dict(
-    #     article_type=article_type,
-    #     study_year=study_year,
-    #     school_type=school_type,
-    #     state=state
-    # )

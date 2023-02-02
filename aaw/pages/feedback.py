@@ -14,11 +14,9 @@ def __get_feedback__(essay: str):
 
     total_input = prompt + essay + '''"""'''
 
-    print("Total input")
-    print(total_input)
-
     # return the completion
     return run_gpt3(total_input, error_tmp=st.empty())
+    # return "Toll gemacht!"
 
 
 def feedback():
@@ -27,30 +25,27 @@ def feedback():
     title_empty = st.empty()
     input_empty = st.empty()
     fb_empty = st.empty()
-    btn2_empty = st.empty()
-    btn_empty = st.empty()
-    # btn_back = st.empty()
 
-    widgets = [
-        title_empty,
-        input_empty,
-        fb_empty,
-        btn_empty,
-        # btn_back
-    ]
-    __feedbackpage__.extend(li=widgets)
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        btn_new_essay = st.empty()
+    with col2:
+        btn_back = st.empty()
+    with col3:
+        btn_modify_essay = st.empty()
 
     title_empty.markdown("# {}".format(STRINGS["FEEDBACK_HEADER"]))
 
     essay = session.get('text')
     input_empty.info(essay)
 
-    # btn_back.button(label=STRINGS["BUTTON_BACK"], on_click=submit)
-
     with st.spinner():
         feedback_text = __get_feedback__(session.get('text'))
         session.update('feedback', feedback_text)
         store_data()
     fb_empty.success(f'''{feedback_text}''')
-    btn_empty.button(STRINGS["FEEDBACK_RESET"], on_click=go_home)
-    btn2_empty.button(STRINGS["FEEDBACK_MODIFY"], on_click=go_inputtext, kwargs=dict(prompt=True))
+
+    btn_new_essay.button(STRINGS["FEEDBACK_RESET"], on_click=go_home)
+    btn_back.button(STRINGS["BUTTON_BACK"], on_click=submit)
+    btn_modify_essay.button(STRINGS["FEEDBACK_MODIFY"])

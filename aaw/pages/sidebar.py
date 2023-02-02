@@ -1,6 +1,4 @@
 import streamlit as st
-from ..callbacks import go_home
-from ..mysession import session
 from ..globals import STRINGS
 
 # <img src="https://raw.githubusercontent.com/leoxiang66/streamlit-tutorial/IDP/widgets/static/tum.png"
@@ -10,6 +8,7 @@ logo_url = "https://raw.githubusercontent.com/Kasneci-Lab/AI-assisted-writing/ui
            "token=GHSAT0AAAAAAB5LLOQ6SNTKYWBWMEEJVQ4SY62WHRQ"
 dalle_url = "https://raw.githubusercontent.com/Kasneci-Lab/AI-assisted-writing/ui/img/DALLE-PEER.png?" \
             "token=GHSAT0AAAAAAB5LLOQ6GMWJVVBUI2DADYJ4Y62WG6A"
+
 
 def render_sidebar():
     sidebar_markdown = '''
@@ -53,8 +52,3 @@ def render_sidebar():
     '''.format(header=STRINGS["SIDEBAR_HEADER"], logo_url=logo_url, dalle_url=dalle_url)
 
     st.sidebar.markdown(sidebar_markdown, unsafe_allow_html=True)
-
-    # if st.sidebar.selectbox('Debug', options=['No', 'Yes']) == 'Yes':
-    #     session.update('debug', True)
-    # else:
-    session.update('debug', False)
