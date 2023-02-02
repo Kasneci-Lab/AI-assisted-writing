@@ -46,6 +46,7 @@ def store_data() -> None:
     feedback = session.get('feedback')
     if feedback is not None:
         df = pd.read_csv(DATAPATH)
+
         new_sample = {
             'essay category': session.get('user_args')['article'],
             'study year': session.get('user_args')['year'],
@@ -53,12 +54,10 @@ def store_data() -> None:
             'state': session.get('user_args')['state'],
             'title': session.get('title'),
             'essay text': session.get('text'),
-            # 'teacher correction': session.get('teacher'),
             'feedback': session.get('feedback')
         }
-        new_sample = list(new_sample.values())
-        # csvkit.sync.sync_append(csv_filepath=DATAPATH, values=new_sample)
-        df = df.append(new_sample, True)
+        df_new = pd.DataFrame.from_records([new_sample])
+        df = pd.concat([df, df_new])
         df.to_csv(DATAPATH, index=False)
 
 
