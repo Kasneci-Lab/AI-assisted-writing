@@ -1,7 +1,7 @@
 from .base import BasePage
 import streamlit as st
 from ..mysession import session
-from ..callbacks import go_home, choose_input_type
+from ..callbacks import go_home, choose_input_type, go_modify_text
 from ..utils import store_data, run_gpt3
 from ..globals import STRINGS
 
@@ -36,8 +36,8 @@ def feedback():
         btn_new_essay = st.empty()
     with col2:
         btn_back = st.empty()
-    # with col3:
-    #    btn_modify_essay = st.empty()
+    with col3:
+        btn_modify_essay = st.empty()
 
     #############################
     # Fill all empty containers #
@@ -56,4 +56,4 @@ def feedback():
 
     btn_new_essay.button(STRINGS["FEEDBACK_RESET"], on_click=go_home)
     btn_back.button(STRINGS["BUTTON_BACK"], on_click=choose_input_type)
-    # btn_modify_essay.button(STRINGS["FEEDBACK_MODIFY"])
+    btn_modify_essay.button(STRINGS["FEEDBACK_MODIFY"], on_click=go_modify_text)

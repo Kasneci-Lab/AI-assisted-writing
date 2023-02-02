@@ -62,7 +62,14 @@ def choose_input_type():
         raise NotImplementedError()  # todo
 
 
-def submit_essay(essay):
-    session.update('text', essay)
+def submit_essay(essay=None):
+    if essay:
+        # Todo: If coming back, do not regenerate the feedback!!
+        session.update('text', essay)
     session.clear()
     session.update('current_page', 'feedback')
+
+
+def go_modify_text():
+    session.clear()
+    session.update('current_page', 'modify_text')

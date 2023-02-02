@@ -1,7 +1,7 @@
 import streamlit as st
 st.set_page_config(layout="wide")
 from aaw.mysession import session
-from aaw.pages import (homepage, upload_image, feedback, input_text, input_type, login, PAGES)
+from aaw.pages import (homepage, upload_image, feedback, input_text, input_type, modify_text, login, PAGES)
 from aaw.utils import create_dataset
 
 # create dataset folder
@@ -14,6 +14,7 @@ session.update('page_map', dict(
     feedback=feedback,
     input_text=input_text,
     input_type=input_type,
+    modify_text=modify_text,
     login=login,
 ))
 
