@@ -78,9 +78,9 @@ def store_data() -> None:
     if feedback is not None:
         df = pd.read_csv(DATAPATH)
         new_sample = {
-            'essay category': session.get('user_args')['article_type'],
-            'study year': session.get('user_args')['study_year'],
-            'school type': session.get('user_args')['school_type'],
+            'essay category': session.get('user_args')['article'],
+            'study year': session.get('user_args')['year'],
+            'school type': session.get('user_args')['school'],
             'state': session.get('user_args')['state'],
             'title': session.get('title'),
             'essay text': session.get('text'),

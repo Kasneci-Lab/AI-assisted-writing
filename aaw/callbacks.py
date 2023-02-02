@@ -5,8 +5,8 @@ from .globals import STRINGS
 
 
 def go_inputtext(prompt=False):
-    if prompt:
-        session.update("prompt", True)
+    # if prompt:
+    #    session.update("prompt", True)
 
     session.clear()
     session.update('current_page', 'input_text')
@@ -17,22 +17,31 @@ def resubmit_essay():
 
 
 def go_inputtype():
-    if not valid_user_arguments(session.get('user_args')):
-        error_and_stop("Please enter complete arguments")
-        return
-
+    # Check if there is a new title entered
     title_tmp = session.get('title_tmp')
 
+    # If so, update title
     if title_tmp:
         session.update('title', title_tmp)
 
+    # Verify there is a title set
     title = session.get('title')
     if title is None or title == '':
         error_and_stop("Please enter the title")
         return
 
+    # Set all further variables
+    user_args = dict(
+        article=session.get('article'),
+        school=session.get('school'),
+        year=session.get('year'),
+        state=session.get('state')
+    )
+
+    # Save all new values
     session.clear()
     session.update('title', title)
+    session.update("user_args", user_args)
     session.update('current_page', 'input_type')
 
 
@@ -57,7 +66,7 @@ def submit_essay(essay, teacher=None):
 
 
 def go_home(rerun=False):
-    session.clear()
+    # session.clear()
     session.update('current_page', 'home')
     reset_state_vars()
 

@@ -25,8 +25,6 @@ class BasePage:
         for i in li:
             self.append(empty=i)
 
-        # subscriptable and slice-able
-
     def __getitem__(self, idx):
         return self.__widgets__[idx]
 

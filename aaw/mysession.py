@@ -11,17 +11,17 @@ class MySession:
     def get_page_map(self) -> dict:
         return self.get('page_map')
 
-    def init(self,key:str,value):
+    def init(self, key: str, value):
         if key not in st.session_state:
             st.session_state[key] = value
 
-    def update(self,key:str,value):
-        st.session_state[key]=value
+    def update(self, key: str, value):
+        st.session_state[key] = value
 
-    def has(self,key:str):
+    def has(self, key: str):
         return key in self.to_dict().keys()
 
-    def get(self,key:str):
+    def get(self, key: str):
         tmp = self.to_dict()
         if key in tmp.keys():
             return tmp[key]
@@ -51,4 +51,3 @@ class MySession:
 
 
 session = MySession()
-

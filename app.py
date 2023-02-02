@@ -22,18 +22,13 @@ session.init('page_widgets', dict())
 session.init('current_page', "home")  # 'login'
 session.init('feedback', None)
 session.init('title', None)
-session.init("prompt", False)
-session.init('teacher', None)
-session.init('debug', False)
+session.init("user_args", dict())
+# session.init("prompt", False)
+# session.init('teacher', None)
+# session.init('debug', False)
 
 for page in PAGES:
     page.__post_process__(session)
 
 # render current page
-debug_empty = st.empty()  # todo: remove debug
 session.render()
-
-# debugging
-debug = session.get('debug')
-if debug:
-    debug_empty.info(session.summary())
