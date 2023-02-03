@@ -4,18 +4,14 @@ from ..mysession import session
 from ..callbacks import go_home, choose_input_type, go_modify_text
 from ..utils import store_data, run_gpt3
 from ..globals import STRINGS
+from ..prompt_generation import get_prompt
 
 __feedbackpage__ = BasePage(name='feedback')
 
 
 def __get_feedback__(essay: str):
-    prompt = '''Beim folgenden Text handelt es sich um einen Bericht von einer Schülerin zum Thema Corona. 
-    Gebe Tipps zur Ausdrucksweise wie ein Lehrer und gebe konkrete Verbesserungsvorschläge. Text: """'''  # todo
-
-    total_input = prompt + essay + '''"""'''
-
-    # return the completion
-    return run_gpt3(total_input, error_tmp=st.empty())
+    prompt = get_prompt(essay)
+    return run_gpt3(prompt, error_tmp=st.empty())
     # return "Toll gemacht!"
 
 
