@@ -35,5 +35,7 @@ def input_text():
         height=500,
     )
 
-    btn.button(STRINGS["INPUT_TEXT_BUTTON"], on_click=submit_essay, kwargs=dict(essay=essay))
+    if essay:
+        btn.button(STRINGS["INPUT_TEXT_BUTTON"], on_click=submit_essay, kwargs=dict(essay=essay))
+
     btn_back.button(label=STRINGS["BUTTON_BACK"], on_click=go_input_type)

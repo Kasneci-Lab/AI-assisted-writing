@@ -59,13 +59,16 @@ def choose_input_type():
         session.update('current_page', 'input_text')
     else:
         print(input_type)
-        raise NotImplementedError()  # todo
+        raise NotImplementedError()
 
 
 def submit_essay(essay=None):
     if essay:
-        # Todo: If coming back, do not regenerate the feedback!!
         session.update('text', essay)
+        session.update("new_feedback", True)
+    else:
+        session.update("new_feedback", False)
+
     session.clear()
     session.update('current_page', 'feedback')
 

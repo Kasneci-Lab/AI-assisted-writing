@@ -48,10 +48,15 @@ def feedback():
     essay = session.get('text')
     input_empty.info(essay)
 
-    with st.spinner():
-        feedback_text = __get_feedback__(session.get('text'))
-        session.update('feedback', feedback_text)
-        store_data()
+    feedback_text = session.get("feedback")
+
+    if session.get("new_feedback"):
+        # Only regenerate the feedback, if a new text is entered
+        with st.spinner():
+            feedback_text = __get_feedback__(session.get('text'))
+            session.update('feedback', feedback_text)
+            store_data()
+
     fb_empty.success(f'''{feedback_text}''')
 
     btn_new_essay.button(STRINGS["FEEDBACK_RESET"], on_click=go_home)

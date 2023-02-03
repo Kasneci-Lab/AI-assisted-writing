@@ -25,6 +25,7 @@ session.init('feedback', None)
 session.init('title', None)
 session.init("user_args", dict())
 session.init("input_type", None)
+session.init("new_feedback", True)
 
 for page in PAGES:
     page.__post_process__(session)

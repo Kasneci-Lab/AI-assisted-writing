@@ -1,13 +1,8 @@
 import streamlit as st
 from ..globals import STRINGS
 
-# <img src="https://raw.githubusercontent.com/leoxiang66/streamlit-tutorial/IDP/widgets/static/tum.png"
-# alt="TUM" width="200"/>
-
-logo_url = "https://raw.githubusercontent.com/Kasneci-Lab/AI-assisted-writing/ui/img/Peer_logo.png?" \
-           "token=GHSAT0AAAAAAB5LLOQ6SNTKYWBWMEEJVQ4SY62WHRQ"
-dalle_url = "https://raw.githubusercontent.com/Kasneci-Lab/AI-assisted-writing/ui/img/DALLE-PEER.png?" \
-            "token=GHSAT0AAAAAAB5LLOQ6GMWJVVBUI2DADYJ4Y62WG6A"
+logo_url = "https://raw.githubusercontent.com/Kasneci-Lab/AI-assisted-writing/ui/img/Peer_logo.png"
+dalle_url = "https://raw.githubusercontent.com/Kasneci-Lab/AI-assisted-writing/ui/img/DALLE-PEER.png"
 
 
 def render_sidebar():
