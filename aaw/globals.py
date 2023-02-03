@@ -1,13 +1,6 @@
 from pathlib import Path
-import json
 import pandas as pd
-
-
-def __read_apis__():
-    API_PATH = Path('.api.json')
-    with open(API_PATH, 'r', encoding='UTF-8') as f:
-        load_dict = json.load(f)
-    return load_dict
+import streamlit as st
 
 
 def __get_strings__(lang):
@@ -26,5 +19,10 @@ STRINGS = __get_strings__(language)
 
 INPUT_TYPES = [STRINGS["INPUT_TYPE_PICTURE"], STRINGS["INPUT_TYPE_TEXT"]]
 DATAPATH = Path('dataset').joinpath('raw.csv')
-APIs = __read_apis__()
 
+APIs = {
+    "openai": st.secrets["openai_secrets"]["openai_key"],
+    "login_pwd": st.secrets["login_password"],
+    "ocr_app_id": st.secrets["ocr_secrets"]["ocr_app_id"],
+    "ocr_app_key": st.secrets["ocr_secrets"]["ocr_app_key"]
+}

@@ -1,7 +1,7 @@
 import streamlit as st
 from .base import BasePage
 from ..callbacks import go_home
-from ..globals import APIs, STRINGS
+from ..globals import STRINGS, APIs
 import time
 
 __loginpage__ = BasePage(name='login')

@@ -78,6 +78,7 @@ def image_to_text(image) -> str:
         f.write(bytes_data)
 
     # Step 2: Convert file to jpg-format
+    print("Convert input to JPG format...")
     # Todo: Enable to upload multiple images!
     num_requests = 1
     random_str = get_random_string(5)
@@ -102,8 +103,6 @@ def image_to_text(image) -> str:
     # Step 3: Call OCR Software
     print("Calling OCR API...")
     ocr_text = ocr(random_str, num_requests)
-
-    print(ocr_text)
 
     # Remove the temporary files again
     for filename in glob.glob("tmp/" + random_str + "*"):

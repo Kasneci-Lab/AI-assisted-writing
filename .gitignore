@@ -9,6 +9,7 @@ __pycache__/
 dataset/
 tmp/
 
+.streamlit
 .api.json
 test.py
 
