@@ -26,16 +26,28 @@ def get_random_string(length) -> str:
 
 
 def create_dataset():
+    # Create folder to save all data
     directory = 'dataset'
     p = Path(directory)
     p.mkdir(parents=True, exist_ok=True)
 
+    # Create file to save all information
     filepath = p.joinpath('raw.csv')
     if not filepath.exists():
         df = pd.DataFrame(
             columns=['essay category', 'study year', 'school type', 'state',
                      'title', 'essay text', 'feedback'])  # 'teacher correction',
         df.to_csv(filepath, index=False)
+
+    # Create folder for raw images
+    sub_dir = directory + "/raw_data"
+    p_sub = Path(sub_dir)
+    p_sub.mkdir(parents=True, exist_ok=True)
+
+    # Create folder for temporary data
+    tmp_dir = "tmp"
+    p_tmp = Path(tmp_dir)
+    p_tmp.mkdir(parents=True, exist_ok=True)
 
 
 def store_data() -> None:
