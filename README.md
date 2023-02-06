@@ -1,23 +1,22 @@
-# ai-assisted-writing
+![Peer Logo](https://github.com/Kasneci-Lab/AI-assisted-writing/blob/ui/img/Peer_logo.png?raw=true)
 
 ## Requirements
 - python=3.10
 - ```
+  apt install packages.txt
   pip install requirements.txt
   ```
 
-## Usage
-> passcode: abc
-
 ### 1. create an api json file
-create a `.api.json` file under the project root.
+Create a `secrects.toml` file under in a `.streamlit` directory.
 An example:
 ```
-{
-  "openai": "sk-...",
-  "ocr_app_id": "...",
-  "ocr_app_key": "..."
-}
+[openai_secrets]
+openai_key =  "sk-..."
+
+[ocr_secrets]
+ocr_app_id =  "..."
+ocr_app_key = "..."
 ```
 
 ### 2. use Docker
