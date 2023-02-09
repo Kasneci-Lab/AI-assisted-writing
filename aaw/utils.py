@@ -3,7 +3,6 @@ import glob
 
 import random
 import string
-import pandas as pd
 
 import requests
 import openai
@@ -15,7 +14,29 @@ from pathlib import Path
 
 PACKAGE_ROOT = str(Path(__package__).absolute())
 from .mysession import session
-from .globals import DATAPATH, APIs
+from .globals import APIs, COLUMNS
+
+from shillelagh.backends.apsw.db import connect
+
+def login_to_Google():
+    print("\n\n##########################\n\n")
+    print("Login to Google API")
+
+    connect_args = {"path": ":memory:",
+                   "adapters": "gsheetsapi",
+                   "adapter_kwargs": {
+                       "gsheetsapi": {
+                           "service_account_info": {
+                               **APIs["g_service_account"]
+                           }
+                       }
+                   }
+    }
+
+    conn = connect(**connect_args)
+    cursor = conn.cursor()
+    print("Login done.")
+    return cursor
 
 
 def get_random_string(length) -> str:
@@ -24,24 +45,26 @@ def get_random_string(length) -> str:
     result_str = ''.join(random.choice(letters) for i in range(length))
     return result_str
 
+def get_whole_dataset():
+    cursor = login_to_Google()
+    query = f'SELECT * FROM "{APIs["gsheets_url"]}"'
+    dataset = cursor.execute(query)
+    return dataset
+
+def add_row_to_dataset(new_values):
+    cursor = login_to_Google()
+    columns_str = ", ".join(COLUMNS)
+    new_values_str = ", ".join([f"\'{str(x)}\'" for x in new_values.values()])
+
+    query2 = f'INSERT INTO "{APIs["gsheets_url"]}" ({columns_str}) VALUES ({new_values_str})'
+    print(query2)
+    cursor.execute(query2)
+
 
 def create_dataset():
-    # Create folder to save all data
-    directory = 'dataset'
-    p = Path(directory)
-    p.mkdir(parents=True, exist_ok=True)
-
-    # Create file to save all information
-    filepath = p.joinpath('raw.csv')
-    if not filepath.exists():
-        df = pd.DataFrame(
-            columns=['essay category', 'study year', 'school type', 'state',
-                     'title', 'essay text', 'feedback'])  # 'teacher correction',
-        df.to_csv(filepath, index=False)
-
     # Create folder for raw images
-    sub_dir = directory + "/raw_data"
-    p_sub = Path(sub_dir)
+    raw_dir = "raw_data"
+    p_sub = Path(raw_dir)
     p_sub.mkdir(parents=True, exist_ok=True)
 
     # Create folder for temporary data
@@ -57,20 +80,16 @@ def store_data() -> None:
     """
     feedback = session.get('feedback')
     if feedback is not None:
-        df = pd.read_csv(DATAPATH)
-
         new_sample = {
-            'essay category': session.get('user_args')['article'],
-            'study year': session.get('user_args')['year'],
-            'school type': session.get('user_args')['school'],
+            'essay_category': session.get('user_args')['article'],
+            'study_year': session.get('user_args')['year'],
+            'school_type': session.get('user_args')['school'],
             'state': session.get('user_args')['state'],
             'title': session.get('title'),
-            'essay text': session.get('text'),
+            'essay_text': session.get('text'),
             'feedback': session.get('feedback')
         }
-        df_new = pd.DataFrame.from_records([new_sample])
-        df = pd.concat([df, df_new])
-        df.to_csv(DATAPATH, index=False)
+        add_row_to_dataset(new_sample)
 
 
 def image_to_text(image) -> str:
@@ -83,7 +102,7 @@ def image_to_text(image) -> str:
     print("Image type: " + image_type)
     bytes_data = image.getvalue()
 
-    path = "dataset/raw_data/" + filename
+    path = "raw_data/" + filename
 
     # Save bytes
     with open(path, 'wb') as f:
