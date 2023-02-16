@@ -51,6 +51,7 @@ def feedback():
         with st.spinner():
             feedback_text = __get_feedback__(session.get('text'))
             session.update('feedback', feedback_text)
+            fb_empty.success(f'''{feedback_text}''')
             store_data()
 
     fb_empty.success(f'''{feedback_text}''')

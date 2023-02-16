@@ -16,6 +16,7 @@ PACKAGE_ROOT = str(Path(__package__).absolute())
 from .mysession import session
 from .globals import APIs, COLUMNS
 
+from shillelagh.exceptions import ProgrammingError
 from shillelagh.backends.apsw.db import connect
 
 def login_to_Google():
@@ -89,7 +90,12 @@ def store_data() -> None:
             'essay_text': session.get('text'),
             'feedback': session.get('feedback')
         }
-        add_row_to_dataset(new_sample)
+
+        try:
+            add_row_to_dataset(new_sample)
+        except ProgrammingError as err:
+            print("#####  There was an error storing the new instance!  ########")
+            print(err)
 
 
 def image_to_text(image) -> str:
