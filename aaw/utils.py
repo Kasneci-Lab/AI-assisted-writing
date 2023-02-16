@@ -177,24 +177,29 @@ def ocr(image_name: str, num_requests=1) -> str:
 def run_gpt3(prompt: str, engine="text-davinci-003", max_tokens=1000, error_tmp=None):
     openai.api_key = APIs["openai"]
 
+    exception = None
+
     # create a completion
-    while True:
+    for i in range(10):
         try:
             completion = openai.Completion.create(engine=engine, prompt=prompt, max_tokens=max_tokens)
-            break
+            # return the completion
+            return completion.choices[0].text, None
         except InvalidRequestError as ire:
+            # If this happens directly stop trying and return
             print("####  Invalid Request!  ####")
             print(ire)
             if error_tmp:
                 error_tmp.error("Der Text kann aus folgendem Grund nicht bearbeitet werden: " + str(ire))
             return "", ire
         except Exception as e:
+            # For all other exceptions, try multiple times
             print("#####" + str(e) + "#############")
             if error_tmp:
                 error_tmp.error(str(e))
             time.sleep(5)
             if error_tmp:
                 error_tmp.empty()
+            exception = e
 
-    # return the completion
-    return completion.choices[0].text, None
+    return "", exception
