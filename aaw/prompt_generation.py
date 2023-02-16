@@ -11,7 +11,7 @@ def get_prompt(essay):
     prompt += "Text: \"{essay}\" "
     prompt += "Gib Tipps zur Ausdrucksweise wie ein freundlicher Lehrer und gib konkrete Verbesserungsvorschläge."
 
-    prompt = prompt.format(title=title, year=user_args["year"], essay=essay) # article=user_args["article"], 
+    prompt = prompt.format(title=title, article=user_args["article"],  year=user_args["year"], essay=essay)
 
     print(prompt)
 
