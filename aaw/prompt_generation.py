@@ -5,13 +5,13 @@ def get_prompt(essay):
     title = session.get("title")
     user_args = session.get("user_args")
 
-    prompt = get_article_information(article=user_args["article"])
-    prompt += "Beim folgendem Text handelt es sich um einen {article} von einer Schülerin in der {year}. Klasse. "
-
+    prompt = "" # get_article_information(article=user_args["article"])
+    prompt += "Beim folgendem Text handelt es sich um einen {article} von einer Schülerin oder einem Schüler in der {year}. Klasse. "
     prompt += "Das Thema bzw. der Titel ist \"{title}\". "
-    prompt += "Gib Tipps zur Ausdrucksweise wie ein Lehrer und gib konkrete Verbesserungsvorschläge. Text: \"{essay}\""
+    prompt += "Text: \"{essay}\" "
+    prompt += "Gib Tipps zur Ausdrucksweise wie ein freundlicher Lehrer und gib konkrete Verbesserungsvorschläge."
 
-    prompt = prompt.format(title=title, article=user_args["article"], year=user_args["year"], essay=essay)
+    prompt = prompt.format(title=title, year=user_args["year"], essay=essay) # article=user_args["article"], 
 
     print(prompt)
 
