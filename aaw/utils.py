@@ -6,6 +6,7 @@ import string
 
 import requests
 import openai
+from openai.error import InvalidRequestError
 import time
 
 from pdf2image import convert_from_path
@@ -98,7 +99,7 @@ def store_data() -> None:
             print(err)
 
 
-def image_to_text(image) -> str:
+def image_to_text(image):
 
     # Step 1: Save uploaded file
     filename = image.name
@@ -151,9 +152,9 @@ def image_to_text(image) -> str:
              "Passe die Fehler an: "
     total_input = prompt + '''"""''' + ocr_text + '''"""'''
 
-    text = run_gpt3(total_input)
+    text, error_msg = run_gpt3(total_input)
     text = text.strip()
-    return text
+    return text, error_msg
 
 
 def ocr(image_name: str, num_requests=1) -> str:
@@ -181,8 +182,14 @@ def run_gpt3(prompt: str, engine="text-davinci-003", max_tokens=1000, error_tmp=
         try:
             completion = openai.Completion.create(engine=engine, prompt=prompt, max_tokens=max_tokens)
             break
+        except InvalidRequestError as ire:
+            print("####  Invalid Request!  ####")
+            print(ire)
+            if error_tmp:
+                error_tmp.error("Der Text kann aus folgendem Grund nicht bearbeitet werden: " + str(ire))
+            return "", ire
         except Exception as e:
-            print(str(e))
+            print("#####" + str(e) + "#############")
             if error_tmp:
                 error_tmp.error(str(e))
             time.sleep(5)
@@ -190,4 +197,4 @@ def run_gpt3(prompt: str, engine="text-davinci-003", max_tokens=1000, error_tmp=
                 error_tmp.empty()
 
     # return the completion
-    return completion.choices[0].text
+    return completion.choices[0].text, None

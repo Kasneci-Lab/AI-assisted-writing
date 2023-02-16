@@ -11,7 +11,8 @@ __feedbackpage__ = BasePage(name='feedback')
 
 def __get_feedback__(essay: str):
     prompt = get_prompt(essay)
-    return run_gpt3(prompt, error_tmp=st.empty())
+    text, _ = run_gpt3(prompt, error_tmp=st.empty())
+    return text
     # return "Toll gemacht!"
 
 

@@ -19,6 +19,8 @@ def upload_image():
     md_empty = st.empty()
     textarea_empty = st.empty()
 
+    error_empty = st.empty()
+
     col1, col2 = st.columns(2)
 
     with col1:
@@ -42,15 +44,19 @@ def upload_image():
     @st.cache(show_spinner=False)
     def __ocr_cache__(image_input):
         with st.spinner(STRINGS["UPLOAD_IMAGE_WAITING"]):
-            text_output = image_to_text(image_input)
-        return text_output
+            text_output, error_msg = image_to_text(image_input)
+        return text_output, error_msg
 
     if essay_picture is not None:
-        text = __ocr_cache__(essay_picture)
+        text, error_msg = __ocr_cache__(essay_picture)
         # text = "Test"
         md_empty.markdown('### {}:'.format(STRINGS["UPLOAD_IMAGE_CORRECT_MISTAKES"]))
-        essay_text = textarea_empty.text_area('**{}**'.format(STRINGS["UPLOAD_IMAGE_ESSAY"]),
+
+        if text:
+            essay_text = textarea_empty.text_area('**{}**'.format(STRINGS["UPLOAD_IMAGE_ESSAY"]),
                                               value=text, height=500)
+        if error_msg:
+            error_empty.error("Der Text kann aus folgendem Grund nicht bearbeitet werden: " + str(error_msg))
 
     if essay_text:
         btn.button(STRINGS["UPLOAD_IMAGE_BUTTON"], on_click=submit_essay, kwargs=dict(essay=essay_text))
