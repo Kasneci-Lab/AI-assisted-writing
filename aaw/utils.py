@@ -15,7 +15,7 @@ from pathlib import Path
 
 PACKAGE_ROOT = str(Path(__package__).absolute())
 from .mysession import session
-from .globals import APIs, COLUMNS
+from .globals import APIs, COLUMNS, STRINGS
 
 from shillelagh.exceptions import ProgrammingError
 from shillelagh.backends.apsw.db import connect
@@ -190,7 +190,7 @@ def run_gpt3(prompt: str, engine="text-davinci-003", max_tokens=1000, error_tmp=
             print("####  Invalid Request!  ####")
             print(ire)
             if error_tmp:
-                error_tmp.error("Der Text kann aus folgendem Grund nicht bearbeitet werden: " + str(ire))
+                error_tmp.error(STRINGS["PROCESS_ERROR"] + str(ire))
             return "", ire
         except Exception as e:
             # For all other exceptions, try multiple times

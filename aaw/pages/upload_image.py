@@ -56,7 +56,7 @@ def upload_image():
             essay_text = textarea_empty.text_area('**{}**'.format(STRINGS["UPLOAD_IMAGE_ESSAY"]),
                                               value=text, height=500)
         if error_msg:
-            error_empty.error("Der Text kann aus folgendem Grund nicht bearbeitet werden: " + str(error_msg))
+            error_empty.error(STRINGS["PROCESS_ERROR"] + str(error_msg))
 
     if essay_text:
         btn.button(STRINGS["UPLOAD_IMAGE_BUTTON"], on_click=submit_essay, kwargs=dict(essay=essay_text))
