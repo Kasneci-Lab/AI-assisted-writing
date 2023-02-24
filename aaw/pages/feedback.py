@@ -2,7 +2,8 @@ from .base import BasePage
 import streamlit as st
 from ..mysession import session
 from ..callbacks import go_home, choose_input_type, go_modify_text
-from ..utils import store_data, run_gpt3
+from ..utils import run_gpt3
+from ..io_utils import store_data
 from ..globals import STRINGS
 from ..prompt_generation import get_prompt
 

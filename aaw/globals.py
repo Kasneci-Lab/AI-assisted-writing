@@ -29,4 +29,4 @@ APIs = {
     "gsheets_url":  st.secrets["private_gsheets_url"]
 }
 
-COLUMNS = ["essay_category", "study_year", "school_type", "state", "title", "essay_text", "feedback"]
+COLUMNS = ["essay_category", "study_year", "school_type", "state", "title", "essay_text", "feedback", "time_stamp"]
