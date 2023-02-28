@@ -49,7 +49,14 @@ def homepage():
     # Add some space
     st.empty().markdown("&nbsp;")
 
-    btn_empty = st.empty()
+    def on_button_click():
+        if not checkbox:
+            st.error(STRINGS["DATA_PROTECTION_ERROR"])
+        else:
+            go_input_type()
+
+    checkbox = st.checkbox(STRINGS["DATA_PROTECTION_STATEMENT"], value=False)
+    st.button(STRINGS["HOME_TITLE_BUTTON"], on_click=on_button_click)
 
     # Add some space
     st.empty().markdown("&nbsp;")
@@ -109,4 +116,6 @@ def homepage():
                                      'Thüringen'
                                  ], key='state')
 
-    btn_empty.button(STRINGS["HOME_TITLE_BUTTON"], on_click=go_input_type)
+
+
+
