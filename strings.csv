@@ -37,6 +37,6 @@ LOGIN_SUCCESS,"The passcode is correct. You will be redirected to the app soon..
 LOGIN_FAILURE,"The passcode is wrong.","Das eingegebene Passwort ist falsch."
 BUTTON_BACK,"Back","Zurück"
 ERROR_TITLE_MISSING,"Please enter the title","Bitte gib einen Titel ein"
-DATA_PROTECTION_STATEMENT,"I accept the data protection statement.","Ich bin damit einverstanden, dass meine Daten vom Lehrstuhl für Human-Centered Technologies for Learning an der Technischen Universität München für die wissenschaftliche Forschung verwendet werden. Die Daten können nur von berechtigten Personen eingesehen und bearbeitet werden. Diese Einwilligung ist freiwillig. Eine (automatische) Löschung der erhobenen Daten erfolgt nach 6 Monaten. Ich versichere, dass ich keine Namen oder andere persönlichen Daten angebe, sondern mein Text anonymisiert ist."
+DATA_PROTECTION_STATEMENT,"I accept the data protection statement.","Ich bin damit einverstanden, dass meine Daten vom Lehrstuhl für Human-Centered Technologies for Learning an der Technischen Universität München für die wissenschaftliche Forschung verwendet werden. Die Daten können nur von berechtigten Personen eingesehen und bearbeitet werden. Diese Einwilligung ist freiwillig. Ich versichere, dass ich keine Namen oder andere persönlichen Daten angebe, sondern mein Text anonymisiert ist."
 DATA_PROTECTION_ERROR,"Please accept the data protection statement.","Bitte bestätige die Datenschutzerklärung."
 PROCESS_ERROR,"The text can be processed due to the following error: ","Der Text kann aus folgendem Grund nicht bearbeitet werden: "
