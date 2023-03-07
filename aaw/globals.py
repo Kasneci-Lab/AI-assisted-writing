@@ -26,7 +26,8 @@ APIs = {
     "ocr_app_id": st.secrets["ocr_secrets"]["ocr_app_id"],
     "ocr_app_key": st.secrets["ocr_secrets"]["ocr_app_key"],
     "g_service_account": st.secrets["gcp_service_account"],
-    "gsheets_url":  st.secrets["private_gsheets_url"]
+    "gsheets_url":  st.secrets["gsheets"]["private_gsheets_url"],
+    "elo_gsheets_url": st.secrets["gsheets"]["elo_gsheets_url"]
 }
 
 COLUMNS = ["essay_category", "study_year", "school_type", "state", "title", "essay_text", "feedback", "time_stamp"]
