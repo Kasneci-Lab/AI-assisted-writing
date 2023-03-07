@@ -3,7 +3,12 @@ from .mysession import session
 from .globals import STRINGS
 
 
-def go_home(keep_state=False):
+def go_home(keep_state=False,require_fb = False):
+    if require_fb:
+        if session.get('preferred_fb') is None:
+            st.error('Please select your preferred feedback.')
+            return
+
     session.clear()
     session.update('current_page', 'home')
 
@@ -12,6 +17,8 @@ def go_home(keep_state=False):
         session.update('title', None)
         session.update("user_args", dict())
         session.update("input_type", None)
+        session.update('preferred_fb',None)
+
 
 
 def go_input_type():
@@ -65,14 +72,21 @@ def choose_input_type():
 def submit_essay(essay=None):
     if essay:
         session.update('text', essay)
+        session.update('preferred_fb', None)
         session.update("new_feedback", True)
+
     else:
         session.update("new_feedback", False)
+
 
     session.clear()
     session.update('current_page', 'feedback')
 
 
 def go_modify_text():
-    session.clear()
-    session.update('current_page', 'modify_text')
+    if session.get('preferred_fb') is None:
+        st.error('Please select your preferred feedback.')
+        return
+    else:
+        session.clear()
+        session.update('current_page', 'modify_text')

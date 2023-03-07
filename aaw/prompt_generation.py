@@ -1,21 +1,36 @@
 from .mysession import session
+from .io_utils import get_whole_elo
+from typing import Optional
+import numpy as np
+
+def sample_prompt(num_to_sample:int=2):
+    tmp = get_whole_elo()
+    prompts = tmp['prompts']
+    weights = tmp['weights']
+
+    sampled_idx = np.random.choice(len(weights), p=weights, size=num_to_sample,replace=False)
+    if len(sampled_idx)==1:
+        return prompts[sampled_idx]
+    else:
+        return [prompts[i] for i in sampled_idx]
 
 
-def get_prompt(essay):
+def get_prompt(essay, num_prompts = 2):
     title = session.get("title")
     user_args = session.get("user_args")
 
-    prompt = "" # get_article_information(article=user_args["article"])
-    prompt += "Beim folgendem Text handelt es sich um einen {article} von einer Schülerin oder einem Schüler in der {year}. Klasse. "
-    prompt += "Das Thema bzw. der Titel ist \"{title}\". "
-    prompt += "Text: \"{essay}\" "
-    prompt += "Gib Tipps zur Ausdrucksweise wie ein freundlicher Lehrer und gib konkrete Verbesserungsvorschläge."
+    # prompt = "" # get_article_information(article=user_args["article"])
+    # prompt += "Beim folgendem Text handelt es sich um einen {article} von einer Schülerin oder einem Schüler in der {year}. Klasse. "
+    # prompt += "Das Thema bzw. der Titel ist \"{title}\". "
+    # prompt += "Text: \"{essay}\" "
+    # prompt += "Gib Tipps zur Ausdrucksweise wie ein freundlicher Lehrer und gib konkrete Verbesserungsvorschläge."
 
-    prompt = prompt.format(title=title, article=user_args["article"],  year=user_args["year"], essay=essay)
+    prompts = sample_prompt(num_prompts)
 
-    print(prompt)
+    prompts = [i.format(title=title, article=user_args["article"],  year=user_args["year"], essay=essay)
+               for i in prompts]
 
-    return prompt
+    return prompts
 
 
 def get_article_information(article):

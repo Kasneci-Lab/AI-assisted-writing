@@ -30,7 +30,7 @@ def modify_text():
 
     title_empty.markdown("# {}".format(STRINGS["INPUT_TEXT_MODIFY"]))
 
-    feedback = session.get("feedback")
+    feedback = session.get("feedback")[session.get('preferred_fb')]
 
     feedback_empty.info(feedback)
 

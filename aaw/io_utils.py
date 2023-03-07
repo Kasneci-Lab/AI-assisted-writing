@@ -1,5 +1,6 @@
 from .mysession import session
 from .globals import APIs, COLUMNS
+import numpy as np
 
 from shillelagh.exceptions import ProgrammingError
 from shillelagh.backends.apsw.db import connect
@@ -59,7 +60,7 @@ def store_data() -> None:
             'state': session.get('user_args')['state'],
             'title': session.get('title'),
             'essay_text': session.get('text'),
-            'feedback': session.get('feedback'),
+            'feedback': session.get('feedback')[session.get('preferred_fb')],
             'time_stamp': datetime.today().strftime('%Y-%m-%d')
         }
 
@@ -68,3 +69,37 @@ def store_data() -> None:
         except ProgrammingError as err:
             print("#####  There was an error storing the new instance!  ########")
             print(err)
+
+
+def get_whole_elo(to_prob=True) -> dict:
+    '''
+
+    :return: a dict object with keys: "prompts", "weights"
+    '''
+    cursor = login_to_google()
+    query = f'SELECT * FROM "{APIs["elo_gsheets_url"]}"'
+    dataset = cursor.execute(query)
+    prompts = []
+    weights = []
+
+    for i in dataset:
+        prompts.append(i[1])
+        weights.append(i[2])
+
+    weights = np.array(weights, dtype=float)
+    if to_prob:
+        weights /= np.sum(weights)
+
+    return dict(
+        prompts = prompts,
+        weights = weights
+    )
+
+def inc_elo_weight(idx:int):
+    tmp = get_whole_elo(to_prob=False)['weights']
+    new_weight = tmp[idx] + 0.5  #todo: linear or exp?
+
+    cursor = login_to_google()
+    query = f'''UPDATE "{APIs['elo_gsheets_url']}" SET Weight = {new_weight} WHERE id = {idx}'''
+    cursor.execute(query)
+    print(f'{idx}th prompt has inc weight.')

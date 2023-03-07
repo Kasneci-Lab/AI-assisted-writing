@@ -19,6 +19,7 @@ STRINGS = __get_strings__(language)
 
 INPUT_TYPES = [STRINGS["INPUT_TYPE_PICTURE"], STRINGS["INPUT_TYPE_TEXT"]]
 DATAPATH = Path('dataset').joinpath('raw.csv')
+NUM_PROPMTS = 2
 
 APIs = {
     "openai": st.secrets["openai_secrets"]["openai_key"],
