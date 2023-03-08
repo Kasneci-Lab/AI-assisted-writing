@@ -14,7 +14,8 @@ from PIL import Image
 from pathlib import Path
 
 PACKAGE_ROOT = str(Path(__package__).absolute())
-from .globals import APIs, STRINGS
+from ..globals import APIs, STRINGS
+
 
 
 def create_dataset():
@@ -110,12 +111,10 @@ def ocr(image_name: str, num_requests=1) -> str:
     total_output = " ".join(output_text)
     return total_output
 
-
 def run_gpt3(prompt: str, engine="text-davinci-003", max_tokens=1000, error_tmp=None):
     openai.api_key = APIs["openai"]
 
     exception = None
-
     # create a completion
     for i in range(10):
         try:
@@ -140,3 +139,4 @@ def run_gpt3(prompt: str, engine="text-davinci-003", max_tokens=1000, error_tmp=
             exception = e
 
     return "", exception
+
