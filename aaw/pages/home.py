@@ -76,6 +76,7 @@ def homepage():
     article_header_empty.markdown('''##### {}'''.format(STRINGS["SIDEBAR_CATEGORY"]))
     article_choice_empty.selectbox("article", label_visibility="collapsed",
                                    options=['Bericht',
+                                            'Geschichte',
                                             'Erörterung',
                                             'Essay',
                                             'Gedichtsanalyse',
@@ -88,7 +89,7 @@ def homepage():
     school_header_empty.markdown('''##### {}'''.format(STRINGS["SIDEBAR_SCHOOL"]))
     school_choice_empty.selectbox("school", label_visibility="collapsed",
                                   options=['Grundschule',
-                                           'Hauptschule',
+                                           'Mittelschule',
                                            'Realschule',
                                            'Gymnasium', ], key='school')
 
