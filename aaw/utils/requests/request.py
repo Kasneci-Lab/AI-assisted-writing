@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union, Callable, Dict
 import asyncio
 from requests_toolkit.openpy import AsyncChatGPT
 from requests_toolkit.openpy.config import ChatCompletionConfig
@@ -56,26 +56,35 @@ class BaseRequestor:
 
             return '', exception
 
-    async def __check_tasks_completion__(self, tasks):
-        g_completed = set()
-        while True:
-            completed, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
-            for task in completed:
-                taks_name = task.get_name()
-                if taks_name not in g_completed:
-                    g_completed.add(taks_name)
-                    yield task
+    async def __yield_done_generator__(self,tasks):
+        """Async generator that yields completed tasks from a list of tasks."""
+        completed = set()
+        while tasks:
+            done, tasks = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+            for task in done - completed:
+                completed.add(task)
+                yield task
 
-            # check if all finished
-            if not pending:
-                break
+    def yield_done(self,tasks, callback:Union[Callable,Dict]):
+        async def wrapper():
+            async for t in self.__yield_done_generator__(tasks):
+                print(f"{t.get_name()} finished.")
+                if isinstance(callback,dict):
+                    callback_ = callback[t.get_name()]
+                    callback_(t)
+                else:
+                    callback(t)
+
+        loop = asyncio.get_event_loop()
+        task= loop.create_task(wrapper())
+        loop.run_until_complete(task)
 
     def __create__empty_string_task__(self):
         async def my_coroutine():
             return ""
         return asyncio.create_task(my_coroutine())
 
-    async def request_n(self,essay:str, systems: List[str],max_tokens=1000, error_tmp=None):
+    def request_n(self,essay:str, systems: List[str],max_tokens=1000, error_tmp=None,*, callback:Union[Dict,Callable]):
         tasks = []
         for j in range(len(systems)):
             sys = systems[j]
@@ -105,10 +114,9 @@ class BaseRequestor:
             task.set_name(j)
             tasks.append(task)
 
+        self.yield_done(tasks,callback)
 
-        async for task in self.__check_tasks_completion__(tasks):
-            fb = task.result()
-            yield (int(task.get_name()),fb)
+
 
 
 
