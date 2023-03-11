@@ -95,6 +95,32 @@ def get_whole_elo(to_prob=True) -> dict:
         weights = weights
     )
 
+def elo_update(idx_prompt_a:int, idx_prompt_b:int, outcome_a_won:bool):
+    # Quick explaination of the ELO Ranking System
+    # https://www.youtube.com/watch?v=AsYfbmp0To0
+    tmp = get_whole_elo(to_prob=False)['weights']
+    elo_a = tmp[idx_prompt_a]
+    elo_b = tmp[idx_prompt_b]
+    
+    # Step 1: calculate expected winning probability of Prompt A
+    probability = 1 / ( 1 + 10^((elo_b - elo_a)/400) )
+    
+    # Step 2: update rankings based on outcome
+    if outcome_a_won:
+        elo_a += 32 * ( 1 - probability )
+        elo_b -= 32 * ( 1 - probability )
+    else:
+        elo_a += 32 * ( 0 - probability )
+        elo_b -= 32 * ( 0 - probability )
+    
+    # write the changes to the google sheet
+    cursor = login_to_google()
+    query = f'''UPDATE "{APIs['elo_gsheets_url']}" SET Weight = {elo_a} WHERE id = {idx_prompt_a}'''
+    cursor.execute(query)
+    cursor = login_to_google()
+    query = f'''UPDATE "{APIs['elo_gsheets_url']}" SET Weight = {elo_b} WHERE id = {idx_prompt_b}'''
+    cursor.execute(query)
+
 def inc_elo_weight(idx:int):
     tmp = get_whole_elo(to_prob=False)['weights']
     new_weight = tmp[idx] + 0.5  #todo: linear or exp?

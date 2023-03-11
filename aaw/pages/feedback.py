@@ -6,7 +6,7 @@ from ..utils import run_gpt3
 from ..io_utils import store_data
 from ..globals import STRINGS,NUM_PROPMTS
 from ..prompt_generation import get_prompt
-from ..io_utils import inc_elo_weight
+from ..io_utils import inc_elo_weight, elo_update
 
 __feedbackpage__ = BasePage(name='feedback')
 
@@ -96,3 +96,14 @@ def feedback():
         store_data()
         inc_elo_weight(idx)
 
+    # updating ELO values
+    # todo get idx of Prompt A and idx of Prompt B
+
+    # e.g.:
+    # idx_a = 1
+    # idx_b = 2
+    if idx != "Undefined":
+        if idx == "Feedback 1":
+            elo_update(idx_a, idx_b, True)    
+        if idx == "Feedback 2":
+            elo_update(idx_a, idx_b, False)
