@@ -1,7 +1,7 @@
 import streamlit as st
 st.set_page_config(layout="wide")
 from aaw.mysession import session
-from aaw.pages import (homepage, upload_image, feedback, input_text, input_type, modify_text, login, PAGES)
+from aaw.pages import (homepage, upload_image, feedback, input_text, input_type, modify_text, PAGES)
 from aaw.utils import create_dataset
 
 # create dataset folder
@@ -15,7 +15,6 @@ session.update('page_map', dict(
     input_text=input_text,
     input_type=input_type,
     modify_text=modify_text,
-    login=login,
 ))
 
 # only has effect when a new session starts, a new session starts when user refreshes the page
@@ -26,7 +25,6 @@ session.init('title', None)
 session.init("user_args", dict())
 session.init("input_type", None)
 session.init("new_feedback", True)
-session.init('preferred_fb', None)
 
 
 for page in PAGES:

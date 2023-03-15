@@ -100,12 +100,12 @@ def ocr(image_name: str, num_requests=1) -> str:
 
     for i in range(num_requests):
         r = requests.post("https://api.mathpix.com/v3/text",
-                          files={"file": open("tmp/" + image_name + str(i) + '.jpg', "rb")},
-                          headers={
+                                 files={"file": open("tmp/" + image_name + str(i) + '.jpg', "rb")},
+                                 headers={
                               "app_id": APIs["ocr_app_id"],
                               "app_key": APIs["ocr_app_key"]
                           }
-                          )
+                                 )
         output_text.append(r.json()["text"])
 
     total_output = " ".join(output_text)

@@ -1,3 +1,0 @@
-from .request import (
-    BaseRequestor
-)
