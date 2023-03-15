@@ -1,5 +1,5 @@
 from .mysession import session
-from .globals import APIs, COLUMNS
+from .globals import APIs, COLUMNS, ELO_COLUMNS
 import numpy as np
 
 from shillelagh.exceptions import ProgrammingError
@@ -29,9 +29,15 @@ def login_to_google():
     return cursor
 
 
+#########################
+#                       #
+#   Store essay data    #
+#                       #
+#########################
+
 def get_whole_dataset():
     cursor = login_to_google()
-    query = f'SELECT * FROM "{APIs["gsheets_url"]}"'
+    query = f'SELECT * FROM "{APIs["essay_gsheets_url"]}"'
     dataset = cursor.execute(query)
     return dataset
 
@@ -41,7 +47,7 @@ def add_row_to_dataset(new_values):
     columns_str = ", ".join(COLUMNS)
     new_values_str = ", ".join([f"\'{str(x)}\'" for x in new_values.values()])
 
-    query2 = f'INSERT INTO "{APIs["gsheets_url"]}" ({columns_str}) VALUES ({new_values_str})'
+    query2 = f'INSERT INTO "{APIs["essay_gsheets_url"]}" ({columns_str}) VALUES ({new_values_str})'
     print(query2)
     cursor.execute(query2)
 
@@ -60,10 +66,10 @@ def store_data() -> None:
             'state': session.get('user_args')['state'],
             'title': session.get('title'),
             'essay_text': session.get('text'),
-            'feedback': session.get('feedback')[session.get('preferred_fb')],
+            'feedback1': session.get('feedback')["feedback"][0],
+            'feedback2': session.get('feedback')["feedback"][1],
             'time_stamp': datetime.today().strftime('%Y-%m-%d')
         }
-
         try:
             add_row_to_dataset(new_sample)
         except ProgrammingError as err:
@@ -71,61 +77,76 @@ def store_data() -> None:
             print(err)
 
 
-def get_whole_elo(to_prob=True) -> dict:
-    '''
+#########################
+#                       #
+#   Store elo ranking   #
+#                       #
+#########################
 
+def __elo_column_to_idx__(column):
+    try:
+        return ELO_COLUMNS.index(column)
+    except ValueError as e:
+        print("Column " + column + " not in dataset!")
+        return 0
+
+
+def get_whole_elo(to_prob=True) -> dict:
+    """
     :return: a dict object with keys: "prompts", "weights"
-    '''
+    """
     cursor = login_to_google()
     query = f'SELECT * FROM "{APIs["elo_gsheets_url"]}"'
     dataset = cursor.execute(query)
-    prompts = []
-    weights = []
+
+    elo_dict = dict(ids=[], names=[], prompts=[], weights=[])
+
+    ids_idx = __elo_column_to_idx__("id")
+    names_idx = __elo_column_to_idx__("name")
+    prompt_idx = __elo_column_to_idx__("prompt")
+    weight_idx = __elo_column_to_idx__("weight")
 
     for i in dataset:
-        prompts.append(i[1])
-        weights.append(i[2])
+        elo_dict["ids"].append(i[ids_idx])
+        elo_dict["names"].append(i[names_idx])
+        elo_dict["prompts"].append(i[prompt_idx])
+        elo_dict["weights"].append(i[weight_idx])
 
-    weights = np.array(weights, dtype=float)
+    elo_dict["weights"] = np.array(elo_dict["weights"], dtype=float)
+
     if to_prob:
-        weights /= np.sum(weights)
+        elo_dict["weights"] /= np.sum(elo_dict["weights"])
 
-    return dict(
-        prompts = prompts,
-        weights = weights
-    )
+    return elo_dict
+
+
+def update_elo_weights(prompt_id, new_elo):
+    cursor = login_to_google()
+    query = f'''UPDATE "{APIs['elo_gsheets_url']}" SET Weight = {new_elo} WHERE id = {prompt_id}'''
+    cursor.execute(query)
+
 
 def elo_update(idx_prompt_a:int, idx_prompt_b:int, outcome_a_won:bool):
-    # Quick explaination of the ELO Ranking System
+    # Quick explanation of the ELO Ranking System
     # https://www.youtube.com/watch?v=AsYfbmp0To0
-    tmp = get_whole_elo(to_prob=False)['weights']
-    elo_a = tmp[idx_prompt_a]
-    elo_b = tmp[idx_prompt_b]
+    current_elo = get_whole_elo(to_prob=False)['weights']
+    new_elo_a, new_elo_b = compute_updated_elo(current_elo[idx_prompt_a], current_elo[idx_prompt_b], outcome_a_won)
     
+    # write the changes to the Google sheet
+    update_elo_weights(idx_prompt_a, new_elo_a)
+    update_elo_weights(idx_prompt_b, new_elo_b)
+
+
+def compute_updated_elo(elo_a, elo_b, outcome_a_won):
     # Step 1: calculate expected winning probability of Prompt A
-    probability = 1 / ( 1 + 10^((elo_b - elo_a)/400) )
-    
+    probability = 1 / (1 + 10 ** ((elo_b - elo_a) / 400))
+
     # Step 2: update rankings based on outcome
     if outcome_a_won:
-        elo_a += 32 * ( 1 - probability )
-        elo_b -= 32 * ( 1 - probability )
+        elo_a += 32 * (1 - probability)
+        elo_b -= 32 * (1 - probability)
     else:
-        elo_a += 32 * ( 0 - probability )
-        elo_b -= 32 * ( 0 - probability )
-    
-    # write the changes to the google sheet
-    cursor = login_to_google()
-    query = f'''UPDATE "{APIs['elo_gsheets_url']}" SET Weight = {elo_a} WHERE id = {idx_prompt_a}'''
-    cursor.execute(query)
-    cursor = login_to_google()
-    query = f'''UPDATE "{APIs['elo_gsheets_url']}" SET Weight = {elo_b} WHERE id = {idx_prompt_b}'''
-    cursor.execute(query)
+        elo_a += 32 * (0 - probability)
+        elo_b -= 32 * (0 - probability)
 
-def inc_elo_weight(idx:int):
-    tmp = get_whole_elo(to_prob=False)['weights']
-    new_weight = tmp[idx] + 0.5  #todo: linear or exp?
-
-    cursor = login_to_google()
-    query = f'''UPDATE "{APIs['elo_gsheets_url']}" SET Weight = {new_weight} WHERE id = {idx}'''
-    cursor.execute(query)
-    print(f'{idx}th prompt has inc weight.')
+    return elo_a, elo_b

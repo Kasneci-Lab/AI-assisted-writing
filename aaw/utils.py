@@ -14,8 +14,7 @@ from PIL import Image
 from pathlib import Path
 
 PACKAGE_ROOT = str(Path(__package__).absolute())
-from ..globals import APIs, STRINGS
-
+from aaw.globals import APIs, STRINGS
 
 
 def create_dataset():

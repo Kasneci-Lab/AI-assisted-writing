@@ -19,7 +19,7 @@ STRINGS = __get_strings__(language)
 
 INPUT_TYPES = [STRINGS["INPUT_TYPE_PICTURE"], STRINGS["INPUT_TYPE_TEXT"]]
 DATAPATH = Path('dataset').joinpath('raw.csv')
-NUM_PROPMTS = 2
+NUM_PROMPTS = 2
 
 APIs = {
     "openai": st.secrets["openai_secrets"]["openai_key"],
@@ -28,7 +28,18 @@ APIs = {
     "ocr_app_key": st.secrets["ocr_secrets"]["ocr_app_key"],
     "g_service_account": st.secrets["gcp_service_account"],
     "gsheets_url":  st.secrets["gsheets"]["private_gsheets_url"],
-    "elo_gsheets_url": st.secrets["gsheets"]["elo_gsheets_url"]
+    "elo_gsheets_url": st.secrets["gsheets"]["elo_gsheets_url"],
+    "essay_gsheets_url": st.secrets["gsheets"]["essay_gsheets_url"]
 }
 
-COLUMNS = ["essay_category", "study_year", "school_type", "state", "title", "essay_text", "feedback", "time_stamp"]
+COLUMNS = ["essay_category",
+           "study_year",
+           "school_type",
+           "state",
+           "title",
+           "essay_text",
+           "feedback1",
+           "feedback2",
+           "time_stamp"]
+
+ELO_COLUMNS = ["id", "name", "prompt", "weight"]
