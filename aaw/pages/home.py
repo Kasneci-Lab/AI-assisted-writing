@@ -116,7 +116,3 @@ def homepage():
                                      'Schleswig-Holstein',
                                      'Thüringen'
                                  ], key='state')
-
-
-
-

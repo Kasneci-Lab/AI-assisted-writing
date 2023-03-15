@@ -14,7 +14,13 @@ def modify_text():
 
     __modifytextpage__.sidebar()
     title_empty = st.empty()
-    feedback_empty = st.empty()
+
+    f1, f2 = st.columns(2)
+    with f1:
+        f1_empty = st.empty()
+    with f2:
+        f2_empty = st.empty()
+
     textarea_empty = st.empty()
 
     col1, col2 = st.columns(2)
@@ -30,13 +36,10 @@ def modify_text():
 
     title_empty.markdown("# {}".format(STRINGS["INPUT_TEXT_MODIFY"]))
 
-    feedback = session.get("feedback")
-
-    feedback_empty.info(feedback)
+    f1_empty.info(session.get("feedback")["feedback"][0])
+    f2_empty.info(session.get("feedback")["feedback"][1])
 
     old_essay = session.get('text')
-
-    print(old_essay)
 
     essay = textarea_empty.text_area(
         value=old_essay,
