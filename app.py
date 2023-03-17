@@ -27,11 +27,9 @@ session.init("user_args", dict())
 session.init("input_type", None)
 session.init("new_feedback", True)
 
-<<<<<<< Updated upstream
 
-=======
 # Perform post-processing for each page in PAGES
->>>>>>> Stashed changes
+
 for page in PAGES:
     page.__post_process__(session)
 
