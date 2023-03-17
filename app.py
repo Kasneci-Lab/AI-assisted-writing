@@ -4,10 +4,10 @@ from aaw.mysession import session
 from aaw.pages import (homepage, upload_image, feedback, input_text, input_type, modify_text, PAGES)
 from aaw.utils import create_dataset
 
-# create dataset folder
+# Create dataset folder
 create_dataset()
 
-# my_session setup
+# Set up session variables for page navigation and data storage
 session.update('page_map', dict(
     home=homepage,
     upload_image=upload_image,
@@ -17,7 +17,8 @@ session.update('page_map', dict(
     modify_text=modify_text,
 ))
 
-# only has effect when a new session starts, a new session starts when user refreshes the page
+# Initialize session variables with default values
+# These variables will only be initialized when a new session starts (e.g., when the user refreshes the page)
 session.init('page_widgets', dict())
 session.init('current_page', "home")  # 'login'
 session.init('feedback', None)
@@ -26,9 +27,13 @@ session.init("user_args", dict())
 session.init("input_type", None)
 session.init("new_feedback", True)
 
+<<<<<<< Updated upstream
 
+=======
+# Perform post-processing for each page in PAGES
+>>>>>>> Stashed changes
 for page in PAGES:
     page.__post_process__(session)
 
-# render current page
+# Render the current page
 session.render()
