@@ -20,7 +20,7 @@ session.update('page_map', dict(
 # Initialize session variables with default values
 # These variables will only be initialized when a new session starts (e.g., when the user refreshes the page)
 session.init('page_widgets', dict())
-session.init('current_page', "home")  # 'login'
+session.init('current_page', "home")  
 session.init('feedback', None)
 session.init('title', None)
 session.init("user_args", dict())
