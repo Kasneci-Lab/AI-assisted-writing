@@ -7,3 +7,4 @@ requests==2.28.1
 shillelagh==1.1.5
 shillelagh[gsheetsapi]==1.1.5
 requests-toolkit-stable==0.18.3
+altair==4.1.0
