@@ -13,6 +13,10 @@ tmp/
 .api.json
 test.py
 
+client_secrets.json
+*.ipynb
+raw_data/
+
 # Distribution / packaging
 .Python
 build/
