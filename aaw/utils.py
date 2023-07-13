@@ -3,6 +3,7 @@ import glob
 
 import random
 import string
+import json
 
 import requests
 import openai
@@ -37,7 +38,6 @@ def get_random_string(length) -> str:
 
 
 def image_to_text(image):
-
     # Step 1: Save uploaded file
     filename = image.name
     print(f'''uploaded: {filename}''')
@@ -97,18 +97,23 @@ def image_to_text(image):
 def ocr(image_name: str, num_requests=1) -> str:
     output_text = []
 
+    # Very important that Mathpix does not save the data
+    options_json = json.dumps({"metadata": {"improve_mathpix": False}})
+
     for i in range(num_requests):
         r = requests.post("https://api.mathpix.com/v3/text",
-                                 files={"file": open("tmp/" + image_name + str(i) + '.jpg', "rb")},
-                                 headers={
+                          files={"file": open("tmp/" + image_name + str(i) + '.jpg', "rb")},
+                          data={"options_json": options_json},
+                          headers={
                               "app_id": APIs["ocr_app_id"],
-                              "app_key": APIs["ocr_app_key"]
-                          }
-                                 )
+                              "app_key": APIs["ocr_app_key"],
+                          },
+                          )
         output_text.append(r.json()["text"])
 
     total_output = " ".join(output_text)
     return total_output
+
 
 def run_gpt3(prompt: str, engine="text-davinci-003", max_tokens=1000, error_tmp=None):
     openai.api_key = APIs["openai"]
@@ -138,4 +143,3 @@ def run_gpt3(prompt: str, engine="text-davinci-003", max_tokens=1000, error_tmp=
             exception = e
 
     return "", exception
-
