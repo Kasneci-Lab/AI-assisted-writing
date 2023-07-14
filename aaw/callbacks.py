@@ -14,7 +14,6 @@ def go_home(keep_state=False):
         session.update("input_type", None)
 
 
-
 def go_input_type():
     # Check if there is a new title entered
     title_tmp = session.get('title_tmp')
@@ -70,7 +69,6 @@ def submit_essay(essay=None):
 
     else:
         session.update("new_feedback", False)
-
 
     session.clear()
     session.update('current_page', 'feedback')

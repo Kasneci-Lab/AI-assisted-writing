@@ -1,32 +1,9 @@
 from .mysession import session
-from .globals import APIs, COLUMNS, ELO_COLUMNS
 import numpy as np
 
-from shillelagh.exceptions import ProgrammingError
-from shillelagh.backends.apsw.db import connect
+import pandas as pd
 
 from datetime import datetime
-
-
-def login_to_google():
-    print("\n\n##########################\n\n")
-    print("Login to Google API")
-
-    connect_args = {"path": ":memory:",
-                   "adapters": "gsheetsapi",
-                   "adapter_kwargs": {
-                       "gsheetsapi": {
-                           "service_account_info": {
-                               **APIs["g_service_account"]
-                           }
-                       }
-                   }
-    }
-
-    conn = connect(**connect_args)
-    cursor = conn.cursor()
-    print("Login done.")
-    return cursor
 
 
 #########################
@@ -34,22 +11,6 @@ def login_to_google():
 #   Store essay data    #
 #                       #
 #########################
-
-def get_whole_dataset():
-    cursor = login_to_google()
-    query = f'SELECT * FROM "{APIs["essay_gsheets_url"]}"'
-    dataset = cursor.execute(query)
-    return dataset
-
-
-def add_row_to_dataset(new_values):
-    cursor = login_to_google()
-    columns_str = ", ".join(COLUMNS)
-    new_values_str = ", ".join([f"\'{str(x)}\'" for x in new_values.values()])
-
-    query2 = f'INSERT INTO "{APIs["essay_gsheets_url"]}" ({columns_str}) VALUES ({new_values_str})'
-    print(query2)
-    cursor.execute(query2)
 
 
 def store_data() -> None:
@@ -71,8 +32,13 @@ def store_data() -> None:
             'time_stamp': datetime.today().strftime('%Y-%m-%d')
         }
         try:
-            add_row_to_dataset(new_sample)
-        except ProgrammingError as err:
+            # Add row to data set
+            df = pd.read_excel("essay_data.xlsx")
+            df.loc[len(df)] = new_sample
+            # df = pd.concat([df, pd.DataFrame([new_values])], ignore_index=True)
+            df.to_excel("essay_data.xlsx", index=False)
+
+        except Exception as err:
             print("#####  There was an error storing the new instance!  ########")
             print(err)
 
@@ -83,58 +49,29 @@ def store_data() -> None:
 #                       #
 #########################
 
-def __elo_column_to_idx__(column):
-    try:
-        return ELO_COLUMNS.index(column)
-    except ValueError as e:
-        print("Column " + column + " not in dataset!")
-        return 0
 
-
-def get_whole_elo(to_prob=True) -> dict:
-    """
-    :return: a dict object with keys: "prompts", "weights"
-    """
-    cursor = login_to_google()
-    query = f'SELECT * FROM "{APIs["elo_gsheets_url"]}"'
-    dataset = cursor.execute(query)
-
-    elo_dict = dict(ids=[], names=[], prompts=[], weights=[])
-
-    ids_idx = __elo_column_to_idx__("id")
-    names_idx = __elo_column_to_idx__("name")
-    prompt_idx = __elo_column_to_idx__("prompt")
-    weight_idx = __elo_column_to_idx__("weight")
-
-    for i in dataset:
-        elo_dict["ids"].append(i[ids_idx])
-        elo_dict["names"].append(i[names_idx])
-        elo_dict["prompts"].append(i[prompt_idx])
-        elo_dict["weights"].append(i[weight_idx])
-
-    elo_dict["weights"] = np.array(elo_dict["weights"], dtype=float)
+def get_elo_weights(df, to_prob=True) -> dict:
+    weights = np.array(df["weight"].values, dtype=float)
 
     if to_prob:
-        elo_dict["weights"] /= np.sum(elo_dict["weights"])
+        weights /= np.sum(weights)
 
-    return elo_dict
-
-
-def update_elo_weights(prompt_id, new_elo):
-    cursor = login_to_google()
-    query = f'''UPDATE "{APIs['elo_gsheets_url']}" SET Weight = {new_elo} WHERE id = {prompt_id}'''
-    cursor.execute(query)
+    return weights
 
 
-def elo_update(idx_prompt_a:int, idx_prompt_b:int, outcome_a_won:bool):
+def elo_update(idx_prompt_a: int, idx_prompt_b: int, outcome_a_won: bool):
     # Quick explanation of the ELO Ranking System
     # https://www.youtube.com/watch?v=AsYfbmp0To0
-    current_elo = get_whole_elo(to_prob=False)['weights']
+
+    df = pd.read_excel("elo_ranking.xlsx")
+
+    current_elo = get_elo_weights(df, to_prob=False)
     new_elo_a, new_elo_b = compute_updated_elo(current_elo[idx_prompt_a], current_elo[idx_prompt_b], outcome_a_won)
-    
-    # write the changes to the Google sheet
-    update_elo_weights(idx_prompt_a, new_elo_a)
-    update_elo_weights(idx_prompt_b, new_elo_b)
+
+    df[df["id"] == idx_prompt_a] = new_elo_a
+    df[df["id"] == idx_prompt_b] = new_elo_b
+
+    df.to_excel("elo_ranking.xlsx", index=False)
 
 
 def compute_updated_elo(elo_a, elo_b, outcome_a_won):
@@ -150,3 +87,22 @@ def compute_updated_elo(elo_a, elo_b, outcome_a_won):
         elo_b -= 32 * (0 - probability)
 
     return elo_a, elo_b
+
+
+#########################
+#                       #
+#   Sample prompts      #
+#                       #
+#########################
+
+def sample_prompts(num_prompts=2) -> dict:
+    elo_dataset = pd.read_excel("elo_ranking.xlsx")
+
+    # Choose two prompts based on the elo ranking they have ("better" prompts are sampled more often)
+    weights = get_elo_weights(elo_dataset, to_prob=True)
+    sampled_idx = np.random.choice(len(weights), p=weights, size=num_prompts, replace=False)
+
+    print("Comparing the prompts " + elo_dataset["name"][sampled_idx[0]] +
+          " and " + elo_dataset["name"][sampled_idx[1]])
+
+    return {elo_dataset['id'][i]: elo_dataset['prompt'][i] for i in sampled_idx}

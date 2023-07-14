@@ -1,18 +1,5 @@
 from .mysession import session
-from .io_utils import get_whole_elo
-import numpy as np
-
-def sample_prompts(num_prompts=2) -> dict:
-    elo_dataset = get_whole_elo()
-
-    # Choose two prompts based on the elo ranking they have ("better" prompts are sampled more often)
-    weights = elo_dataset['weights']
-    sampled_idx = np.random.choice(len(weights), p=weights, size=num_prompts, replace=False)
-
-    print("Comparing the prompts " + elo_dataset["names"][sampled_idx[0]] +
-          " and " + elo_dataset["names"][sampled_idx[1]])
-
-    return {elo_dataset['ids'][i]: elo_dataset['prompts'][i] for i in sampled_idx}
+from .io_utils import sample_prompts
 
 
 def get_prompts(essay: str, num_prompts=2) -> dict:
