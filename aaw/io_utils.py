@@ -5,6 +5,9 @@ import pandas as pd
 
 from datetime import datetime
 
+ESSAY_FILE = "essay_data.xlsx"
+ELO_FILE = "elo_ranking.xlsx"
+
 
 #########################
 #                       #
@@ -33,10 +36,10 @@ def store_data() -> None:
         }
         try:
             # Add row to data set
-            df = pd.read_excel("essay_data.xlsx")
+            df = pd.read_excel(ESSAY_FILE)
             df.loc[len(df)] = new_sample
             # df = pd.concat([df, pd.DataFrame([new_values])], ignore_index=True)
-            df.to_excel("essay_data.xlsx", index=False)
+            df.to_excel(ESSAY_FILE, index=False)
 
         except Exception as err:
             print("#####  There was an error storing the new instance!  ########")
@@ -63,15 +66,20 @@ def elo_update(idx_prompt_a: int, idx_prompt_b: int, outcome_a_won: bool):
     # Quick explanation of the ELO Ranking System
     # https://www.youtube.com/watch?v=AsYfbmp0To0
 
-    df = pd.read_excel("elo_ranking.xlsx")
+    df = pd.read_excel(ELO_FILE)
 
     current_elo = get_elo_weights(df, to_prob=False)
     new_elo_a, new_elo_b = compute_updated_elo(current_elo[idx_prompt_a], current_elo[idx_prompt_b], outcome_a_won)
 
-    df[df["id"] == idx_prompt_a] = new_elo_a
-    df[df["id"] == idx_prompt_b] = new_elo_b
+    df.loc[df["id"] == idx_prompt_a, "weight"] = new_elo_a
+    df.loc[df["id"] == idx_prompt_b, "weight"] = new_elo_b
 
-    df.to_excel("elo_ranking.xlsx", index=False)
+    try:
+        # Save new weights
+        df.to_excel(ELO_FILE, index=False)
+    except Exception as err:
+        print("#####  There was an error storing the new weights!  ########")
+        print(err)
 
 
 def compute_updated_elo(elo_a, elo_b, outcome_a_won):
@@ -96,7 +104,7 @@ def compute_updated_elo(elo_a, elo_b, outcome_a_won):
 #########################
 
 def sample_prompts(num_prompts=2) -> dict:
-    elo_dataset = pd.read_excel("elo_ranking.xlsx")
+    elo_dataset = pd.read_excel(ELO_FILE)
 
     # Choose two prompts based on the elo ranking they have ("better" prompts are sampled more often)
     weights = get_elo_weights(elo_dataset, to_prob=True)

@@ -16,6 +16,7 @@ test.py
 client_secrets.json
 *.ipynb
 raw_data/
+*.xlsx
 
 # Distribution / packaging
 .Python
