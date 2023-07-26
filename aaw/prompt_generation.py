@@ -2,6 +2,7 @@ from .mysession import session
 from .io_utils import get_whole_elo
 import numpy as np
 
+
 def sample_prompts(num_prompts=2) -> dict:
     elo_dataset = get_whole_elo()
 
@@ -12,7 +13,7 @@ def sample_prompts(num_prompts=2) -> dict:
     print("Comparing the prompts " + elo_dataset["names"][sampled_idx[0]] +
           " and " + elo_dataset["names"][sampled_idx[1]])
 
-    return {elo_dataset['ids'][i]: elo_dataset['prompts'][i] for i in sampled_idx}
+    return {elo_dataset['ids'][i]: (elo_dataset['engines'][i], elo_dataset['prompts'][i]) for i in sampled_idx}
 
 
 def get_prompts(essay: str, num_prompts=2) -> dict:
@@ -20,9 +21,9 @@ def get_prompts(essay: str, num_prompts=2) -> dict:
     user_args = session.get("user_args")
 
     prompts = sample_prompts(num_prompts)
-    prompts = {k: v.format(title=title, article=user_args["article"], year=user_args["year"], essay=essay,
-                           extra_info=get_article_information(user_args["article"]))
-               for k, v in prompts.items()}
+    prompts = {k: (eng, promp.format(title=title, article=user_args["article"], year=user_args["year"], essay=essay,
+                                     extra_info=get_article_information(user_args["article"])))
+               for k, (eng, promp) in prompts.items()}
 
     return prompts
 

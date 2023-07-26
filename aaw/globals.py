@@ -42,4 +42,4 @@ COLUMNS = ["essay_category",
            "feedback2",
            "time_stamp"]
 
-ELO_COLUMNS = ["id", "name", "prompt", "weight"]
+ELO_COLUMNS = ["id", "name", "prompt", "weight", "engine"]

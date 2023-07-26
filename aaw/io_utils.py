@@ -99,18 +99,20 @@ def get_whole_elo(to_prob=True) -> dict:
     query = f'SELECT * FROM "{APIs["elo_gsheets_url"]}"'
     dataset = cursor.execute(query)
 
-    elo_dict = dict(ids=[], names=[], prompts=[], weights=[])
+    elo_dict = dict(ids=[], names=[], prompts=[], weights=[], engines=[])
 
     ids_idx = __elo_column_to_idx__("id")
     names_idx = __elo_column_to_idx__("name")
     prompt_idx = __elo_column_to_idx__("prompt")
     weight_idx = __elo_column_to_idx__("weight")
+    engine_idx = __elo_column_to_idx__("engine")
 
     for i in dataset:
         elo_dict["ids"].append(i[ids_idx])
         elo_dict["names"].append(i[names_idx])
         elo_dict["prompts"].append(i[prompt_idx])
         elo_dict["weights"].append(i[weight_idx])
+        elo_dict["engines"].append(i[engine_idx])
 
     elo_dict["weights"] = np.array(elo_dict["weights"], dtype=float)
 

@@ -4,7 +4,7 @@ from .base import BasePage
 import streamlit as st
 from ..mysession import session
 from ..callbacks import go_home, choose_input_type, go_modify_text
-from ..utils import run_gpt3
+from ..utils import run_gpt
 from ..io_utils import store_data
 from ..globals import STRINGS,NUM_PROMPTS
 from ..prompt_generation import get_prompts
@@ -17,14 +17,14 @@ def __get_feedback__(essay: str) -> dict:
     prompts = get_prompts(essay, num_prompts=NUM_PROMPTS)
     fbs = dict(prompt_ids=[], feedback=[])
 
-    def run_in_thread(current_id, current_text):
-        text, _ = run_gpt3(current_text, error_tmp=st.empty())
+    def run_in_thread(current_id, current_engine, current_text):
+        text, _ = run_gpt(current_text, engine=current_engine, error_tmp=st.empty())
         fbs["prompt_ids"].append(current_id)
         fbs["feedback"].append(text)
 
     threads = []
-    for p_id, p_text in prompts.items():
-        thread = threading.Thread(target=run_in_thread, args=(p_id, p_text))
+    for p_id, (p_eng, p_text) in prompts.items():
+        thread = threading.Thread(target=run_in_thread, args=(p_id, p_eng, p_text))
         thread.start()
         threads.append(thread)
 

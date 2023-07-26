@@ -89,7 +89,7 @@ def image_to_text(image):
              "Passe die Fehler an: "
     total_input = prompt + '''"""''' + ocr_text + '''"""'''
 
-    text, error_msg = run_gpt3(total_input)
+    text, error_msg = run_gpt(total_input, engine="text-davinci-003")
     text = text.strip()
     return text, error_msg
 
@@ -115,16 +115,22 @@ def ocr(image_name: str, num_requests=1) -> str:
     return total_output
 
 
-def run_gpt3(prompt: str, engine="text-davinci-003", max_tokens=1000, error_tmp=None):
+def run_gpt(prompt: str, engine="text-davinci-003", max_tokens=1000, error_tmp=None):
+    print("using engine " + engine)
+
     openai.api_key = APIs["openai"]
 
     exception = None
     # create a completion
     for i in range(10):
         try:
-            completion = openai.Completion.create(engine=engine, prompt=prompt, max_tokens=max_tokens)
-            # return the completion
-            return completion.choices[0].text, None
+            if engine.startswith("text-davinci"):
+                return run_gpt3(engine=engine, prompt=prompt, max_tokens=max_tokens), None
+            elif engine.startswith("gpt-"):
+                return run_chatgpt(engine=engine, prompt=prompt, max_tokens=max_tokens), None
+            else:
+                print("Unknown engine " + engine + "!")
+                return "", None
         except InvalidRequestError as ire:
             # If this happens directly stop trying and return
             print("####  Invalid Request!  ####")
@@ -143,3 +149,20 @@ def run_gpt3(prompt: str, engine="text-davinci-003", max_tokens=1000, error_tmp=
             exception = e
 
     return "", exception
+
+
+def run_gpt3(prompt: str, engine="text-davinci-003", max_tokens=1000):
+    completion = openai.Completion.create(engine=engine, prompt=prompt, max_tokens=max_tokens)
+    # return the completion
+    return completion.choices[0].text
+
+
+def run_chatgpt(prompt: str, engine="gpt-3.5-turbo", max_tokens=1000):
+    completion = openai.ChatCompletion.create(
+        model=engine,
+        messages=[
+            # {"role": "system", "content": "You are a helpful teacher."},
+            {"role": "user", "content": prompt}
+        ]
+    )
+    return completion['choices'][0]['message']['content']
