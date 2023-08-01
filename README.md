@@ -1,6 +1,6 @@
 ![Peer Logo](https://github.com/Kasneci-Lab/AI-assisted-writing/blob/ui/img/Peer_logo.png?raw=true)
 
-Try PEER on [https://peer-ai-tutor.streamlit.app/](https://peer-ai-tutor.streamlit.app/)
+Try PEER on [https://peer-ai-tutor.streamlit.app/](https://peer.edu.sot.tum.de/)
 
 ## Requirements
 - python=3.10
