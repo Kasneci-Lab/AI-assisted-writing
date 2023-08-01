@@ -23,13 +23,8 @@ NUM_PROMPTS = 2
 
 APIs = {
     "openai": st.secrets["openai_secrets"]["openai_key"],
-    "login_pwd": st.secrets["login_password"],
     "ocr_app_id": st.secrets["ocr_secrets"]["ocr_app_id"],
     "ocr_app_key": st.secrets["ocr_secrets"]["ocr_app_key"],
-    "g_service_account": st.secrets["gcp_service_account"],
-    "gsheets_url":  st.secrets["gsheets"]["private_gsheets_url"],
-    "elo_gsheets_url": st.secrets["gsheets"]["elo_gsheets_url"],
-    "essay_gsheets_url": st.secrets["gsheets"]["essay_gsheets_url"]
 }
 
 COLUMNS = ["essay_category",

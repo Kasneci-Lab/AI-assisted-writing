@@ -41,7 +41,7 @@ def upload_image():
 
     essay_text = None
 
-    @st.cache(show_spinner=False)
+    @st.cache_data(show_spinner=False)
     def __ocr_cache__(image_input):
         with st.spinner(STRINGS["UPLOAD_IMAGE_WAITING"]):
             text_output, error_msg = image_to_text(image_input)

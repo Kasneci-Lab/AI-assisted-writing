@@ -23,13 +23,19 @@ E-Mail: beauftragter(at)datenschutz.tum.de<br />
 
 ### Zwecke und Rechtsgrundlagen für die Verarbeitung personenbezogener Daten
 
-Personenbezogene Daten, die im Zusammenhang mit der Nutzung von PEER erhoben und verarbeitet werden, dienen der korrekten Funktionsweise der Seite.
+Personenbezogene Daten, die im Zusammenhang mit der Nutzung von PEER erhoben und verarbeitet werden, dienen der 
+korrekten Funktionsweise der Seite. Die Rechtsgrundlage für die Datenerhebung und -verarbeitung ist Ihre Einwilligung 
+gemäß Artikel 6 Absatz 1 lit. a) DSGVO. Wir halten uns an die geltenden Datenschutzbestimmungen, 
+insbesondere an die Datenschutzgrundverordnung und das bayerische Datenschutzgesetz. Ihre Einwilligung ist freiwillig 
+und kann jederzeit wiederrufen werden. 
 
 Folgende Daten werden erhoben und gespeichert:
 * Jahrgangsstufe
 * Schulart
 * Bundesland
 * Bei der Nutzung der Bild-Upload-Funktion wird die Handschrift erfasst und in Text umgewandelt. Nach der Umwandlung wird nur der reine Text gespeichert und das hochgeladene Bild gelöscht.
+
+Die Daten können nur von berechtigten Personen eingesehen und bearbeitet werden.
 
 #### Einsatz der OCR API von Mathpix
 Die automatische Handschrifterkennung erfolgt mit dem Drittanbieter "Mathpix, Inc." (https://mathpix.com).
@@ -45,6 +51,31 @@ Folgende Informationen werden mit OpenAI geteilt:
 
 Laut der "API Data Usage Policies" von OpenAI werden die Daten nicht zum Training oder zur Verbesserung ihrer Modelle verwendet.
 Die Daten werden für maximal 30 Tage zum Zwecke der Missbrauchsüberwachung gespeichert und danach gelöscht.
+
+
+### Ihre Rechte
+
+Soweit wir von Ihnen personenbezogene Daten verarbeiten, stehen Ihnen als Betroffener nachfolgende Rechte zu:
+
+* Sie haben das Recht auf Auskunft über die zu Ihrer Person gespeicherten Daten (Art. 15 DSGVO).
+* Sollten unrichtige personenbezogene Daten verarbeitet werden, steht Ihnen ein Recht auf Berichtigung zu (Art. 16 DSGVO). 
+* Liegen die gesetzlichen Voraussetzungen vor, so können Sie die Löschung oder Einschränkung der Verarbeitung verlangen (Art. 17 und 18 DSGVO). 
+* Wenn Sie in die Verarbeitung eingewilligt haben oder ein Vertrag zur Datenverarbeitung besteht und die Datenverarbeitung mithilfe automatisierter Verfahren durchgeführt wird, steht Ihnen gegebenenfalls ein Recht auf Datenübertragbarkeit zu (Art. 20 DSGVO). 
+* Falls Sie in die Verarbeitung eingewilligt haben und die Verarbeitung auf dieser Einwilligung beruht, können Sie die Einwilligung jederzeit für die Zukunft widerrufen. Die Rechtmäßigkeit der aufgrund der Einwilligung bis zum Widerruf erfolgten Datenverarbeitung wird durch diesen nicht berührt.
+
+Sie haben das Recht, aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit gegen die Verarbeitung Ihrer Daten Widerspruch einzulegen, wenn die Verarbeitung ausschließlich auf Grundlage des Art. 6 Abs. 1 Buchst. e oder f DSGVO erfolgt (Art. 21 Abs. 1 Satz 1 DSGVO).
+
+
+### Beschwerderecht bei der Aufsichtsbehörde
+
+Weiterhin besteht ein Beschwerderecht beim Bayerischen Landesbeauftragten für den Datenschutz. 
+Diesen können Sie unter folgenden Kontaktdaten erreichen: <br>
+Postanschrift: Postfach 22 12 19, 80502 München<br>
+Adresse: Wagmüllerstraße 18, 80538 München<br>
+Telefon: 089 212672-0<br>
+E-Mail: poststelle(at)datenschutz-bayern.de<br>
+https://www.datenschutz-bayern.de/
+
 
 ### Weitere Informationen
 

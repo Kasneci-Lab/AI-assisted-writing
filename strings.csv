@@ -37,6 +37,7 @@ LOGIN_SUCCESS,"The passcode is correct. You will be redirected to the app soon..
 LOGIN_FAILURE,"The passcode is wrong.","Das eingegebene Passwort ist falsch."
 BUTTON_BACK,"Back","Zurück"
 ERROR_TITLE_MISSING,"Please enter the title","Bitte gib einen Titel ein"
-DATA_PROTECTION_STATEMENT,"I accept the consent form.","Ich bin damit einverstanden, dass meine Daten vom Lehrstuhl für Human-Centered Technologies for Learning an der Technischen Universität München für die wissenschaftliche Forschung und Weiterentwicklung von PEER verwendet werden. Die Daten können nur von berechtigten Personen eingesehen und bearbeitet werden. Diese Einwilligung ist freiwillig und kann jeder Zeit widerrufen werden. Ich versichere, dass ich keine Namen oder andere persönlichen Daten angebe, sondern mein Text anonymisiert ist."
+DATA_PROTECTION_STATEMENT,"I read and accept the privacy statement.","Ich habe die Datenschutzerklärung gelesen und akzeptiere sie."
+DATA_PROTECTION_STATEMENT2,"I accept the consent form.","Ich bin damit einverstanden, dass meine Daten vom Lehrstuhl für Human-Centered Technologies for Learning an der Technischen Universität München für die wissenschaftliche Forschung und Weiterentwicklung von PEER verwendet werden. Die Daten können nur von berechtigten Personen eingesehen und bearbeitet werden. Diese Einwilligung ist freiwillig und kann jeder Zeit widerrufen werden. Ich versichere, dass ich keine Namen oder andere persönlichen Daten angebe, sondern mein Text anonymisiert ist."
 DATA_PROTECTION_ERROR,"Please accept the consent form.","Bitte bestätige die Einwilligungserklärung."
 PROCESS_ERROR,"The text can be processed due to the following error: ","Der Text kann aus folgendem Grund nicht bearbeitet werden: "
