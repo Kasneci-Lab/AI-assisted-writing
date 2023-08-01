@@ -7,9 +7,9 @@ def get_prompts(essay: str, num_prompts=2) -> dict:
     user_args = session.get("user_args")
 
     prompts = sample_prompts(num_prompts)
-    prompts = {k: v.format(title=title, article=user_args["article"], year=user_args["year"], essay=essay,
-                           extra_info=get_article_information(user_args["article"]))
-               for k, v in prompts.items()}
+    prompts = {k: (eng, promp.format(title=title, article=user_args["article"], year=user_args["year"], essay=essay,
+                                     extra_info=get_article_information(user_args["article"])))
+               for k, (eng, promp) in prompts.items()}
 
     return prompts
 

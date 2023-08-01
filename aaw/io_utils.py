@@ -113,4 +113,4 @@ def sample_prompts(num_prompts=2) -> dict:
     print("Comparing the prompts " + elo_dataset["name"][sampled_idx[0]] +
           " and " + elo_dataset["name"][sampled_idx[1]])
 
-    return {elo_dataset['id'][i]: elo_dataset['prompt'][i] for i in sampled_idx}
+    return {elo_dataset['id'][i]: (elo_dataset['engine'][i], elo_dataset['prompt'][i]) for i in sampled_idx}
