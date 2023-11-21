@@ -108,7 +108,8 @@ def sample_prompts(num_prompts=2) -> dict:
 
     # Choose two prompts based on the elo ranking they have ("better" prompts are sampled more often)
     weights = get_elo_weights(elo_dataset, to_prob=True)
-    sampled_idx = np.random.choice(len(weights), p=weights, size=num_prompts, replace=False)
+    # sampled_idx = np.random.choice(len(weights), p=weights, size=num_prompts, replace=False)
+    sampled_idx = [0, 1]
 
     print("Comparing the prompts " + elo_dataset["name"][sampled_idx[0]] +
           " and " + elo_dataset["name"][sampled_idx[1]])

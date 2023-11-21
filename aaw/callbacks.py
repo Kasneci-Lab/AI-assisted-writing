@@ -40,7 +40,8 @@ def go_input_type():
     session.clear()
     session.update('title', title)
     session.update("user_args", user_args)
-    session.update('current_page', 'input_type')
+    # session.update('current_page', 'input_type')
+    session.update('current_page', 'input_text')
 
 
 def choose_input_type():
@@ -62,9 +63,10 @@ def choose_input_type():
         raise NotImplementedError()
 
 
-def submit_essay(essay=None):
+def submit_essay(essay=None, task=None):
     if essay:
         session.update('text', essay)
+        session.update("task", task)
         session.update("new_feedback", True)
 
     else:

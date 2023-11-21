@@ -2,12 +2,13 @@ from .mysession import session
 from .io_utils import sample_prompts
 
 
-def get_prompts(essay: str, num_prompts=2) -> dict:
+def get_prompts(essay: str, task: str, num_prompts=2) -> dict:
     title = session.get("title")
     user_args = session.get("user_args")
 
     prompts = sample_prompts(num_prompts)
     prompts = {k: (eng, promp.format(title=title, article=user_args["article"], year=user_args["year"], essay=essay,
+                                     task=task,
                                      extra_info=get_article_information(user_args["article"])))
                for k, (eng, promp) in prompts.items()}
 
@@ -50,5 +51,14 @@ def get_article_information(article):
             return "Die Szenenanalyse ist eine Art der Textanalyse, die sich besonders für Theaterstücke eignet. Sie " \
                    "bietet einen Überblick über die Szene, ordnet sie in das Gesamtwerk ein und analysiert die " \
                    "Bedeutung. Form und Inhalt werden analysiert, interpretiert und Zusammenhänge aufgezeigt. "
+        case "Geschichte":
+            return "Folgende Kriterien sind für eine Geschichte relevant: " \
+                    "- Klarere Ausdrucksweise und Strukturierung der Sätze. " \
+                    "- Verbesserung der Beschreibungen, um die Szene lebendiger zu gestalten. " \
+                    "- Bessere Nutzung von Adjektiven und Adverbien zur Verstärkung der Beschreibungen. " \
+                    "- Präzisere Verwendung von Verben, um die Handlung genauer zu beschreiben. " \
+                    "- Einheitliche und präzisere Ausdrucksweise. " \
+                    "- Vermeidung von Wiederholungen und redundanten Phrasen. " \
+                    "- Verbesserte Verknüpfung von Sätzen und Absätzen, um den Text flüssiger zu gestalten"
         case _:
             return ""

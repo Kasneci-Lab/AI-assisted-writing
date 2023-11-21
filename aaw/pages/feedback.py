@@ -1,26 +1,94 @@
 import threading
+import ast
 
 from .base import BasePage
 import streamlit as st
 from ..mysession import session
-from ..callbacks import go_home, choose_input_type, go_modify_text
+from ..callbacks import go_home, choose_input_type, go_modify_text, go_input_type
 from ..utils import run_gpt
 from ..io_utils import store_data
 from ..globals import STRINGS,NUM_PROMPTS
-from ..prompt_generation import get_prompts
+# from ..prompt_generation import get_prompts
 from ..io_utils import elo_update
 
 __feedbackpage__ = BasePage(name='feedback')
 
+prompt1 = "Du bist Deutschlehrer. Du gibt deinen Schülern Feedback auf ihre Aufsätze. " \
+          "Ich werde dir den Text gleich geben. Es handelt sich um eine {article} eines Schülers " \
+          "der Klasse {year} eines bayerischen Gymnasiums. Ich gebe dir auch die Aufgabenstellung und " \
+          "das Material, das der Schüler zur Verfügung hatte. Bitte beurteile den Text.\n" \
+          "Material={task}\n" \
+          "Text={essay}"
 
-def __get_feedback__(essay: str) -> dict:
-    prompts = get_prompts(essay, num_prompts=NUM_PROMPTS)
-    fbs = dict(prompt_ids=[], feedback=[])
+prompt2 = "Du bist Deutschlehrer. Du gibt deinen Schülern Feedback auf ihre Aufsätze. " \
+          "Ich werde dir den Text gleich geben. Es handelt sich um eine {article} eines Schülers " \
+          "der Klasse {year} eines bayerischen Gymnasiums. Ich gebe dir auch die Aufgabenstellung und " \
+          "das Material, das der Schüler zur Verfügung hatte. " \
+          "Bitte beurteile den Text anhand der folgenden Kriterien:\n" \
+          "{extra_info}\n" \
+          "Material={task}\n" \
+          "Text={essay}"
+
+prompt3 = "Du bist Deutschlehrer. Du gibt deinen Schülern Feedback auf ihre Aufsätze. " \
+          "Es handelt sich um eine {article} eines Schülers der Klasse {year} eines bayerischen Gymnasiums. " \
+          "Gib 5 konkrete Verbesserungsvorschläge / Beispiele:\n" \
+          "Material={task}\n" \
+          "Text={essay}"
+
+
+def get_extra_info(article):
+    match article:
+        case 'Bericht':
+            return "- Der Text enthält eine passende und ansprechende Überschrift.\n" \
+                   "- Der Text ist in Einleitung, Hauptteil und Schluss gegliedert.\n" \
+                   "- Die Einleitung führt knapp zum Thema hin.\n" \
+                   "- Die Einleitung weckt Interesse.\n" \
+                   "- Der Hauptteil enthält alle wichtigen Informationen\n" \
+                   "- Die Informationen werden richtig dargestellt\n" \
+                   "- Die Anordnung der Informationen ist zielführend\n" \
+                   "- Der Schluss rundet den Text ab\n" \
+                   "- Die gegebenen Materialien werden genutzt\n" \
+                   "- Nutzt der Text Wörter gemäß ihrer Bedeutungslogik bzw. ihres üblichen Gebrauchs?\n" \
+                   "- Ist der Text sachlich formuliert?\n" \
+                   "- Wurden alle notwendigen Kommas gesetzt? Sind die Wörter korrekt verschriftlicht?\n" \
+                   "- Nutzt der Text unterschiedliche Satzzeichen, Wörter sowie einen vielfältigen Satzbau?\n" \
+                   "- Werden die Informationen aus den Materialien in eigenen Worten wiedergegeben?\n" \
+                   "- Sind die einzelnen Informationen zielführend miteinander verknüpft.\n"
+        case "Geschichte":
+            return "- Klarere Ausdrucksweise und Strukturierung der Sätze.\n " \
+                   "- Verbesserung der Beschreibungen, um die Szene lebendiger zu gestalten.\n " \
+                   "- Bessere Nutzung von Adjektiven und Adverbien zur Verstärkung der Beschreibungen.\n " \
+                   "- Präzisere Verwendung von Verben, um die Handlung genauer zu beschreiben.\n " \
+                   "- Einheitliche und präzisere Ausdrucksweise.\n " \
+                   "- Vermeidung von Wiederholungen und redundanten Phrasen.\n " \
+                   "- Verbesserte Verknüpfung von Sätzen und Absätzen, um den Text flüssiger zu gestalten"
+        case _:
+            return ""
+
+
+def get_prompts(essay: str, task: str, num_prompts=2) -> dict:
+    title = session.get("title")
+    user_args = session.get("user_args")
+    article = user_args["article"]
+
+    prompts = {1: ("gpt-3.5-turbo", prompt1),
+               2: ("gpt-3.5-turbo", prompt2),
+               3: ("gpt-3.5-turbo", prompt3)}
+    prompts = {k: (eng, promp.format(title=title, article=article,
+                                     year=user_args["year"], essay=essay, task=task,
+                                     extra_info=get_extra_info(article)))
+               for k, (eng, promp) in prompts.items()}
+    return prompts
+
+
+def __get_feedback__(essay: str, task: str) -> dict:
+    prompts = get_prompts(essay, task, num_prompts=NUM_PROMPTS)
+    fbs = dict()  # prompt_ids=[], feedback=[]
 
     def run_in_thread(current_id, current_engine, current_text):
-        text, _ = run_gpt(current_text, engine=current_engine, error_tmp=st.empty())
-        fbs["prompt_ids"].append(current_id)
-        fbs["feedback"].append(text)
+        messages = [{"role": "user", "content": current_text}]
+        text, _ = run_gpt(messages, engine=current_engine, error_tmp=st.empty())
+        fbs[current_id] = text
 
     threads = []
     for p_id, (p_eng, p_text) in prompts.items():
@@ -31,15 +99,10 @@ def __get_feedback__(essay: str) -> dict:
     # Wait for all threads to finish!
     for t in threads:
         t.join()
+
+    print("\n\n---------------------------------------------------------\n\n")
+    print("done")
     return fbs
-
-
-def update_elo_in_background(idx, first_is_better: bool):
-    def run_in_thread():
-        elo_update(idx[0], idx[1], first_is_better)
-
-    thread = threading.Thread(target=run_in_thread)
-    thread.start()
 
 
 def feedback():
@@ -47,78 +110,70 @@ def feedback():
     # Set up page structure #
     #########################
 
+    print("In new!!")
+
     __feedbackpage__.sidebar()
 
-    title_empty = st.empty()
-    input_empty = st.empty()
+    header = st.empty()
+    header.markdown("# Feedback Vorschlag")
 
-    fb1, fb2 = st.columns(2)
+    essay_header = st.empty()
+    essay_header.markdown("## Aufsatz")
 
-    with fb1:
-        fb1_title = st.empty()
-        fb1_empty = st.empty()
-        fb1_button = st.empty()
+    essay_content = st.empty()
 
-    with fb2:
-        fb2_title = st.empty()
-        fb2_empty = st.empty()
-        fb2_button = st.empty()
+    fb1_title = st.empty()
+    fb1_title.markdown("### Allgemeines Feedback")
+    fb1_empty = st.empty()
 
-    thank_you_empty = st.empty()
+    fb2_title = st.empty()
+    fb2_title.markdown("### Kriterien")
+    fb2_empty = st.empty()
+
+    fb3_title = st.empty()
+    fb3_title.markdown("### Verbesserungsvorschläge")
+    fb3_empty = st.empty()
 
     divider = st.empty()
+    divider.markdown("\n\n---------------------------------------------------------------------\n\n",
+                     unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
-
     with col1:
         btn_new_essay = st.empty()
+        btn_new_essay.button(STRINGS["FEEDBACK_RESET"], on_click=go_home)
     with col2:
         btn_back = st.empty()
+        btn_back.button(STRINGS["BUTTON_BACK"], on_click=go_input_type)
     with col3:
         btn_modify_essay = st.empty()
+        btn_modify_essay.button(STRINGS["FEEDBACK_MODIFY"], on_click=go_modify_text)
 
     #############################
     # Fill all empty containers #
     #############################
 
-    title_empty.markdown("# {}".format(STRINGS["FEEDBACK_HEADER"]))
-
+    # Set Essay
     essay = session.get('text')
-    input_empty.info(essay)
+    essay_content.info(essay)
 
     fbs = session.get("feedback")
 
-    def show_feedback(disabled=False):
-        fb1_title.markdown("### Feedback 1")
-        fb2_title.markdown("### Feedback 2")
-        fb1_empty.success(f'''{fbs["feedback"][0]}''')
-        fb2_empty.success(f'{fbs["feedback"][1]}')
-
-        button_str = "Ich mag das hier! 👍"
-
-        fb1_button.button(label=button_str, key="F1", disabled=disabled, on_click=update_elo_in_background,
-                          kwargs=dict(idx=fbs["prompt_ids"], first_is_better=True))
-        fb2_button.button(label=button_str, key="F2", disabled=disabled, on_click=update_elo_in_background,
-                          kwargs=dict(idx=fbs["prompt_ids"], first_is_better=False))
+    def show_feedback():
+        # print(fbs)
+        fb1_empty.write(fbs[1])
+        # fb1_empty.success(fbs["feedback"][0])
+        fb2_empty.write(fbs[2])
+        # fb2_empty.success(fbs["feedback"][1])
+        fb3_empty.write(fbs[3])
 
     if session.get('new_feedback'):
         # Only regenerate the feedback, if a new text is entered
         with st.spinner():
-            fbs = __get_feedback__(session.get('text'))
+            fbs = __get_feedback__(session.get('text'), session.get("task"))
             session.update('feedback', fbs)
             session.update("new_feedback", False)
 
-            show_feedback(disabled=False)
-            store_data()
+            show_feedback()
     else:
-        show_feedback(disabled=True)
-        thank_you_empty.success("Danke, dass du dabei hilfst, PEER zu verbessern!")
-
-    divider.markdown("<b>Welches Feedback findest du besser?</b>"
-                     " Mit nur einem Klick kannst du uns helfen, PEER zu optimieren :)"
-                     "\n\n---------------------------------------------------------------------\n\n",
-                     unsafe_allow_html=True)
-
-    btn_new_essay.button(STRINGS["FEEDBACK_RESET"], on_click=go_home)
-    btn_back.button(STRINGS["BUTTON_BACK"], on_click=choose_input_type)
-    btn_modify_essay.button(STRINGS["FEEDBACK_MODIFY"], on_click=go_modify_text)
+        show_feedback()
