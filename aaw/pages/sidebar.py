@@ -4,6 +4,7 @@ from ..mysession import session
 
 logo_url = "https://raw.githubusercontent.com/Kasneci-Lab/AI-assisted-writing/ui/img/Peer_logo.png"
 dalle_url = "https://raw.githubusercontent.com/Kasneci-Lab/AI-assisted-writing/ui/img/DALLE-PEER.png"
+dalle_new_url = "https://raw.githubusercontent.com/Kasneci-Lab/AI-assisted-writing/teacher_view/img/DALLE-New.png"
 
 
 def render_sidebar():
@@ -42,7 +43,7 @@ def render_sidebar():
     
     ---
 
-    '''.format(header=STRINGS["SIDEBAR_HEADER"], logo_url=logo_url, dalle_url=dalle_url)
+    '''.format(header=STRINGS["SIDEBAR_HEADER"], logo_url=logo_url, dalle_url=dalle_new_url)
 
     st.sidebar.markdown(sidebar_markdown, unsafe_allow_html=True)
 
