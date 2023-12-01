@@ -40,6 +40,9 @@ COLUMNS = ["essay_category",
            "essay_text",
            "feedback1",
            "feedback2",
+           "feedback3",
            "time_stamp"]
 
 ELO_COLUMNS = ["id", "name", "prompt", "weight", "engine"]
+
+PROMPTS = [st.secrets["prompts"]["prompt1"], st.secrets["prompts"]["prompt2"], st.secrets["prompts"]["prompt3"]]

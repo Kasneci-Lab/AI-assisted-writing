@@ -50,6 +50,7 @@ def add_row_to_dataset(new_values):
     query2 = f'INSERT INTO "{APIs["essay_gsheets_url"]}" ({columns_str}) VALUES ({new_values_str})'
     print(query2)
     cursor.execute(query2)
+    print("### Successfully saved instance ###")
 
 
 def store_data() -> None:
@@ -58,6 +59,7 @@ def store_data() -> None:
     :return: None
     """
     feedback = session.get('feedback')
+
     if feedback is not None:
         new_sample = {
             'essay_category': session.get('user_args')['article'],
@@ -66,8 +68,9 @@ def store_data() -> None:
             'state': session.get('user_args')['state'],
             'title': session.get('title'),
             'essay_text': session.get('text'),
-            'feedback1': session.get('feedback')["feedback"][0],
-            'feedback2': session.get('feedback')["feedback"][1],
+            'feedback1': feedback[1],
+            'feedback2': feedback[2],
+            'feedback3': feedback[3],
             'time_stamp': datetime.today().strftime('%Y-%m-%d')
         }
         try:

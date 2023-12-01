@@ -55,7 +55,7 @@ def homepage():
         else:
             go_input_type()
 
-    checkbox = st.checkbox(STRINGS["DATA_PROTECTION_STATEMENT"], value=False)
+    checkbox = st.checkbox("Ich habe die Datenschutzerklärung gelesen und akzeptiere sie.", value=False)
     st.button(STRINGS["HOME_TITLE_BUTTON"], on_click=on_button_click)
 
     # Add some space

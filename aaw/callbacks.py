@@ -14,7 +14,6 @@ def go_home(keep_state=False):
         session.update("input_type", None)
 
 
-
 def go_input_type():
     # Check if there is a new title entered
     title_tmp = session.get('title_tmp')
@@ -41,7 +40,8 @@ def go_input_type():
     session.clear()
     session.update('title', title)
     session.update("user_args", user_args)
-    session.update('current_page', 'input_type')
+    # session.update('current_page', 'input_type')
+    session.update('current_page', 'input_text')
 
 
 def choose_input_type():
@@ -63,14 +63,21 @@ def choose_input_type():
         raise NotImplementedError()
 
 
-def submit_essay(essay=None):
+def submit_essay(essay=None, task=None):
+    print("in submit")
+    # Verify there is a title set
+    if essay is None or essay == '':
+        if not session.get("text"):
+            st.error("Aufsatz fehlt.")
+        return
+
     if essay:
         session.update('text', essay)
+        session.update("task", task)
         session.update("new_feedback", True)
 
     else:
         session.update("new_feedback", False)
-
 
     session.clear()
     session.update('current_page', 'feedback')
