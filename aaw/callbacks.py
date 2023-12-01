@@ -64,12 +64,12 @@ def choose_input_type():
 
 
 def submit_essay(essay=None, task=None):
-    print("in submit")
     # Verify there is a title set
     if essay is None or essay == '':
         if not session.get("text"):
+            print("really no essay")
             st.error("Aufsatz fehlt.")
-        return
+            return
 
     if essay:
         session.update('text', essay)

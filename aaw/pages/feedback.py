@@ -85,9 +85,6 @@ def feedback():
     #########################
     # Set up page structure #
     #########################
-
-    print("In new!!")
-
     __feedbackpage__.sidebar()
 
     header = st.empty()

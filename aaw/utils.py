@@ -83,6 +83,10 @@ def image_to_text(image):
     for filename in glob.glob("tmp/" + random_str + "*"):
         os.remove(filename)
 
+    # Remove the temporary files again
+    for filename in glob.glob("raw_data/" + random_str + "*"):
+        os.remove(filename)
+
     # Step 4: Use GPT-3 to improve the text
     print("Calling GPT-3....")
     prompt = "Dieser Text wurde von einer automatischen Handschrifterkennung erfasst. " \
