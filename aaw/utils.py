@@ -113,7 +113,10 @@ def ocr(image_name: str, num_requests=1) -> str:
                               "app_key": APIs["ocr_app_key"],
                           },
                           )
-        output_text.append(r.json()["text"])
+        try:
+            output_text.append(r.json()["text"])
+        except KeyError:
+            print("------ There was an error processing the input image... ----------")
 
     total_output = " ".join(output_text)
     return total_output
