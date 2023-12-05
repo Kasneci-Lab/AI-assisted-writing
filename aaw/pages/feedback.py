@@ -133,12 +133,16 @@ def feedback():
     fbs = session.get("feedback")
 
     def show_feedback():
-        # print(fbs)
-        fb1_empty.write(fbs[1])
-        # fb1_empty.success(fbs["feedback"][0])
-        fb2_empty.write(fbs[2])
-        # fb2_empty.success(fbs["feedback"][1])
-        fb3_empty.write(fbs[3])
+        try:
+            # print(fbs)
+            fb1_empty.write(fbs[1])
+            # fb1_empty.success(fbs["feedback"][0])
+            fb2_empty.write(fbs[2])
+            # fb2_empty.success(fbs["feedback"][1])
+            fb3_empty.write(fbs[3])
+        except TypeError:
+            fb3_empty.error("Fehler bei der Feedback-Generierung.")
+        
 
     if session.get('new_feedback'):
         # Only regenerate the feedback, if a new text is entered
