@@ -89,7 +89,7 @@ def image_to_text(image):
              "Passe die Fehler an: "
     total_input = prompt + '''"""''' + ocr_text + '''"""'''
 
-    text, error_msg = run_gpt(total_input, engine="text-davinci-003")
+    text, error_msg = run_gpt(total_input, engine="gpt-3.5-turbo")
     text = text.strip()
     return text, error_msg
 
