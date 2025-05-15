@@ -45,7 +45,7 @@ def get_whole_dataset():
 def add_row_to_dataset(new_values):
     cursor = login_to_google()
     columns_str = ", ".join(COLUMNS)
-    new_values_str = ", ".join([f"\'{str(x)}\'" for x in new_values.values()])
+    new_values_str = ", ".join([f"\'{str(x).replace("'", "''")}\'" for x in new_values.values()])
 
     query2 = f'INSERT INTO "{APIs["essay_gsheets_url"]}" ({columns_str}) VALUES ({new_values_str})'
     print(query2)
