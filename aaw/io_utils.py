@@ -47,11 +47,11 @@ def add_row_to_dataset(new_values):
     columns_str = ", ".join(COLUMNS)
     
     # Escaping single quotes in the values
-    new_values = []
+    new_values_list = []
     for x in new_values.values():
         x = str(x).replace("'", f"\'\'")
-        new_values.append(f"\'{x}\'")
-    new_values_str = ", ".join(new_values)
+        new_values_list.append(f"\'{x}\'")
+    new_values_str = ", ".join(new_values_list)
 
     query2 = f'INSERT INTO "{APIs["essay_gsheets_url"]}" ({columns_str}) VALUES ({new_values_str})'
     print(query2)
