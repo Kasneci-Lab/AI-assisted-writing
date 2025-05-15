@@ -23,7 +23,7 @@ def login_to_google():
                    }
     }
 
-    conn = connect(**connect_args)
+    conn = connect(":memory:", adapter_kwargs=connect_args["adapter_kwargs"])
     cursor = conn.cursor()
     print("Login done.")
     return cursor
